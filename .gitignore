@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyi
+*.egg-info/
+dist/
+build/
+.idea/
+.vscode/
+.env
+.env.*
+env/
+venv/
+*.sqlite3
+
+# FastAPI
+__pycache__/

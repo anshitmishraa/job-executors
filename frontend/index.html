@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Job Management</title>
+    <link
+      href="{{ url_for('frontend', path='./css/styles.css') }}"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <h1 class="text-3xl font-bold text-center mt-8">Job Management</h1>
+
+    <!-- Job Creation Form -->
+    <div class="mx-8">
+      <h2 class="text-2xl font-bold mt-8">Create Job</h2>
+      <form id="jobCreationForm" class="mt-4 px-8 py-4 bg-white shadow rounded">
+        <!-- Success message -->
+        <div
+          class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
+          id="success-message"
+          style="display: none"
+          role="alert"
+        >
+          <span class="block sm:inline">Your success message here</span>
+        </div>
+
+        <!-- Error message -->
+        <div
+          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+          id="error-message"
+          style="display: none"
+          role="alert"
+        >
+          <p class="error-message"></p>
+          <span
+            class="close-button text-2xl font-bold leading-none absolute top-2 right-2 cursor-pointer"
+            >&times;</span
+          >
+        </div>
+
+        <div class="mb-4">
+          <label for="jobName" class="font-semibold">Job Name:</label>
+          <input
+            type="text"
+            id="jobName"
+            required
+            class="border border-gray-300 px-3 py-2 rounded w-full"
+          />
+        </div>
+
+        <div class="mb-4" id="execution-type">
+          <label for="executionType" class="font-semibold"
+            >Execution Type:</label
+          >
+          <select
+            id="executionType"
+            class="border border-gray-300 px-3 py-2 rounded w-full"
+          >
+            <!-- JavaScript code will dynamically populate the options here -->
+          </select>
+        </div>
+
+        <div class="mb-4" id="job-type" style="display: block">
+          <label for="jobType" class="font-semibold">Job Type:</label>
+          <select
+            id="jobType"
+            class="border border-gray-300 px-3 py-2 rounded w-full"
+          >
+            <!-- JavaScript code will dynamically populate the options here -->
+          </select>
+        </div>
+
+        <div class="mb-4" id="job-execution-name" style="display: block">
+          <label for="jobExecutionName" class="font-semibold"
+            >Job Execution Name:</label
+          >
+          <select
+            id="jobExecutionName"
+            class="border border-gray-300 px-3 py-2 rounded w-full"
+          >
+            <!-- JavaScript code will dynamically populate the options here -->
+          </select>
+        </div>
+
+        <div class="mb-4" id="job-script" style="display: none">
+          <label for="jobScript" class="font-semibold">Script:</label>
+          <textarea
+            id="jobScript"
+            rows="5"
+            class="border border-gray-300 px-3 py-2 rounded w-full"
+          ></textarea>
+        </div>
+
+        <div class="mb-4">
+          <label for="executionTime" class="font-semibold"
+            >Execution Time:</label
+          >
+          <input
+            type="datetime-local"
+            id="executionTime"
+            required
+            class="border border-gray-300 px-3 py-2 rounded w-full"
+            min=""
+            value=""
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="recurring" class="font-semibold">Recurring:</label>
+          <input
+            type="checkbox"
+            id="recurring"
+            class="border border-gray-300 px-3 py-2 rounded"
+          />
+        </div>
+
+        <div class="mb-4" id="event-mapping" style="display: none">
+          <label for="eventMapping" class="font-semibold">Event Mapping:</label>
+          <select
+            id="eventMapping"
+            class="border border-gray-300 px-3 py-2 rounded w-full"
+          >
+            <!-- JavaScript code will dynamically populate the options here -->
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label for="priority" class="font-semibold">Priority:</label>
+          <input
+            type="number"
+            id="priority"
+            class="border border-gray-300 px-3 py-2 rounded w-full"
+          />
+        </div>
+
+        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">
+          Create
+        </button>
+      </form>
+    </div>
+
+    <div class="mx-8 my-4">
+      <!-- Job List -->
+      <h2 class="text-2xl font-bold mt-8">Job List</h2>
+      <div id="tablesContainer" class="mt-4 bg-white shadow rounded">
+        <!-- Tables will be dynamically added here -->
+      </div>
+    </div>
+
+    <script
+      type="module"
+      src="{{ url_for('frontend', path='./js/script.js') }}"
+    ></script>
+  </body>
+</html>
