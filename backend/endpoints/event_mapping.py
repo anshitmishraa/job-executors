@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
-from config.db import get_database_connection
-from schema.event_mapping import EventMappingCreate, EventMappingUpdate
-from models.job import EventMapping
+
+from backend.schema.event_mapping import EventMappingCreate, EventMappingUpdate
+from backend.config.db import get_database_connection
+from backend.models.job import EventMapping
 
 router = APIRouter()
 

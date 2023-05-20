@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
-from config.db import get_database_connection
-from schema.job_type import JobTypeCreate, JobTypeUpdate
-from models.job import JobType
+
+from backend.config.db import get_database_connection
+from backend.schema.job_type import JobTypeCreate, JobTypeUpdate
+from backend.models.job import JobType
 
 router = APIRouter()
 
