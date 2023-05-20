@@ -271,8 +271,9 @@ async def schedule_job(job_id: int):
                 raise HTTPException(
                     status_code=404, detail=constants.JOB_NOT_FOUND)
 
-            if job.status == 'Failed':
+            if job.status == 'Failed' or job.status == 'Cancelled':
                 job.execution_time = datetime.now()
+                job.status == 'Scheduled'
 
             job_helper.create_job_schedule(job, db)
 

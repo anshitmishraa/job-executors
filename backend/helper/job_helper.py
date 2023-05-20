@@ -1,12 +1,14 @@
-from models.job import ExecutionType
+from models.job import ExecutionType, EventMapping
 from apscheduler.triggers.date import DateTrigger
 from models.job import Job
 from tasks import job_tasks
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
+from helper import log
 
 scheduler = BackgroundScheduler()
 scheduler.start()
+logger = log.setup_logging()
 
 
 def create_job_schedule(job: Job, db):
@@ -23,24 +25,33 @@ def create_job_schedule(job: Job, db):
     execution_type = db.query(ExecutionType).filter(
         ExecutionType.id == job.execution_type_id).first()
 
+    event_mapping = db.query(EventMapping).filter(
+        ExecutionType.id == job.event_mapping_id).first()
+
     if execution_type.name == "TIME_SPECIFIC":
         if job.recurring:
             trigger = DateTrigger(run_date=job.execution_time)
-            job_scheduler_response = scheduler.add_job(job_tasks.execute_job, args=[job.id], trigger=trigger, id=str(
-            ),  priority=job.priority)
+            job_scheduler_response = scheduler.add_job(
+                job_tasks.execute_job, args=[job.id], trigger=trigger, priority=job.priority)
+            logger.info("Job has been scheduled: " +
+                        str(job_scheduler_response))
             job_scheduler_response = job.job_scheduler_id = job_scheduler_response.id
         else:
             trigger = DateTrigger(
                 run_date=job.execution_time)
             job_scheduler_response = scheduler.add_job(
-                job_tasks.execute_job, args=[job.id], trigger=trigger, id=str(job.id), priority=job.priority)
+                job_tasks.execute_job, args=[job.id], trigger=trigger, priority=job.priority)
+            logger.info("Job has been scheduled: " +
+                        str(job_scheduler_response))
             job.job_scheduler_id = job_scheduler_response.id
 
     elif execution_type.name == "EVENT_BASED":
         # Schedule the job to execute when the specified event occurs
-        # execute_job.apply_async(args=[job_id])
         job_scheduler_response = scheduler.add_job(job_tasks.execute_job, args=[],
-                                                   id=str(job.id), priority=job.priority, trigger='event', event_name=execution_type.id)
+                                                   priority=job.priority, trigger='event', event_name=event_mapping.name)
+
+        logger.info("Job has been scheduled: " + str(job_scheduler_response))
+
         job.job_scheduler_id = job_scheduler_response.id
 
     db.commit()

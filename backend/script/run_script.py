@@ -32,20 +32,11 @@ def run_script(result_job_type: JobType):
     logger.info("Shell script has been created on path %s", str(script_path))
 
     try:
-        # Make the script file executable
-        subprocess.run(['chmod', '+x', script_path], check=True)
+        # Execute the shell script
+        subprocess.run(['venv\Scripts\python', script_path],
+                       check=True, shell=True)
+
     except subprocess.CalledProcessError as e:
         logger.error(
-            "Error occurred while making the script file executable: %s", str(e))
-        return False
-
-    # Execute the shell script
-    try:
-        subprocess.run(['bash', script_path], check=True)
-        logger.info("Shell script executed successfully.")
-
-        return True
-    except subprocess.CalledProcessError as e:
-        logger.error("Error executing the shell script: %s", str(e))
-
+            "Error occurred while executing the script file executable: %s", str(e))
         return False

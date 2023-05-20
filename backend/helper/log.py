@@ -2,8 +2,13 @@ import logging
 
 
 def setup_logging():
-    # Create a logger instance
+    # Check if the logger has already been set up
     logger = logging.getLogger(__name__)
+    if logger.hasHandlers():
+        # Logger has already been set up, return the existing instance
+        return logger
+
+    # Create a logger instance
     logger.setLevel(logging.INFO)
 
     # Create a file handler to write log messages to a file
