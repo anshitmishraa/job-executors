@@ -6,18 +6,27 @@ from fastapi.staticfiles import StaticFiles
 from endpoints.execution_type_endpoints import router as execution_type_router
 from endpoints.event_mapping import router as event_mapping_router
 from endpoints.job_type_endpoint import router as job_type_router
+from helper import log
+import os
 
+logger = log.setup_logging()
 
 templates = Jinja2Templates(directory="../frontend")
 
 app = FastAPI()
+current_directory = os.getcwd()
+# Get the path of the parent directory
+parent_directory = os.path.dirname(current_directory)
+log.info(current_directory)
+log.info(parent_directory)
+
 app.mount("/frontend", StaticFiles(directory="../frontend"), name="frontend")
 
 
 @app.on_event("startup")
 async def startup():
     with get_database_connection() as db:
-        print("Startup: Connected to the database")
+        log.info("Startup: Connected to the database")
 
 
 @app.on_event("shutdown")
@@ -31,7 +40,7 @@ async def shutdown():
 
         Note: This function is specific to the framework being used (e.g., FastAPI, Starlette).
     """
-    print("Shutdown: Cleaning up resources")
+    log.info("Shutdown: Cleaning up resources")
 
 
 @app.get("/")
