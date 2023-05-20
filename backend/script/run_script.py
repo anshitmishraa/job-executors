@@ -1,7 +1,8 @@
 import os
 import subprocess
-from models.job import JobType
-from helper import log
+
+from backend.models.job import JobType
+from backend.helper import log
 
 
 logger = log.setup_logging()

@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from typing import List
-from config.db import get_database_connection
-from schema.execution_type import ExecutionTypeCreate, ExecutionTypeUpdate
-from models.job import ExecutionType
+from fastapi import APIRouter, HTTPException
+
+from backend.config.db import get_database_connection
+from backend.schema.execution_type import ExecutionTypeCreate, ExecutionTypeUpdate
+from backend.models.job import ExecutionType
 
 router = APIRouter()
 

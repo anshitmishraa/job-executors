@@ -1,17 +1,18 @@
 from fastapi import FastAPI, Request
-from config.db import get_database_connection
-from endpoints.job_endpoints import router as job_router
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from endpoints.execution_type_endpoints import router as execution_type_router
-from endpoints.event_mapping import router as event_mapping_router
-from endpoints.job_type_endpoint import router as job_type_router
-from helper import log
 import os
+
+from backend.endpoints.job_endpoints import router as job_router
+from backend.config.db import get_database_connection
+from backend.endpoints.execution_type_endpoints import router as execution_type_router
+from backend.endpoints.event_mapping import router as event_mapping_router
+from backend.endpoints.job_type_endpoint import router as job_type_router
+from backend.helper import log
 
 logger = log.setup_logging()
 
-templates = Jinja2Templates(directory="../frontend")
+templates = Jinja2Templates(directory="./frontend")
 
 app = FastAPI()
 current_directory = os.getcwd()
@@ -20,7 +21,7 @@ parent_directory = os.path.dirname(current_directory)
 logger.info(current_directory)
 logger.info(parent_directory)
 
-app.mount("/frontend", StaticFiles(directory="../frontend"), name="frontend")
+app.mount("/frontend", StaticFiles(directory="./frontend"), name="frontend")
 
 
 @app.on_event("startup")

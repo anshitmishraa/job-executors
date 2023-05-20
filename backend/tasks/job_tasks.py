@@ -1,10 +1,11 @@
-from helper import job_helper, log
-from config.db import get_database_connection
-from models.job import Job
 from datetime import datetime
 from dotenv import load_dotenv
-from models.job import JobType
-from script import run_script as script
+
+from backend.helper import job_helper, log
+from backend.config.db import get_database_connection
+from backend.models.job import Job
+from backend.models.job import JobType
+from backend.script import run_script as script
 
 load_dotenv()
 
