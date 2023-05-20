@@ -13,7 +13,7 @@ def run_script(result_job_type: JobType):
     script = result_job_type['script']
 
     # Get the current directory
-    current_directory = os.getcwd() + '\script'
+    current_directory = os.getcwd()
 
     # Specify the script file name
     script_filename = 'script.sh'
