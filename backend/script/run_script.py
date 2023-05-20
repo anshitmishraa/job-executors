@@ -36,7 +36,6 @@ def run_script(result_job_type: JobType):
         # Execute the shell script
         subprocess.run(['bash', script_path],
                        check=True, shell=True)
-
     except subprocess.CalledProcessError as e:
         logger.error(
             "Error occurred while executing the script file executable: %s", str(e))
