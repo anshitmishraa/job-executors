@@ -3,8 +3,11 @@ from fastapi import APIRouter, HTTPException
 from backend.schema.event_mapping import EventMappingCreate, EventMappingUpdate
 from backend.config.db import get_database_connection
 from backend.models.job import EventMapping
+from backend.helper import log
 
 router = APIRouter()
+
+logger = log.setup_logging()
 
 
 @router.post("/")

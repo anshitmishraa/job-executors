@@ -3,6 +3,7 @@ export const showSuccess = function (message) {
   const successContainer = document.getElementById("success-message");
 
   successContainer.textContent = message;
+  successContainer.style.display = "block";
 
   setTimeout(function () {
     successContainer.style.opacity = "0";

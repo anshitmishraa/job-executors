@@ -1,6 +1,7 @@
 from apscheduler.triggers.date import DateTrigger
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
+from apscheduler.triggers.interval import IntervalTrigger
 
 from backend.models.job import ExecutionType, EventMapping
 from backend.models.job import Job
@@ -31,9 +32,22 @@ def create_job_schedule(job: Job, db):
 
     if execution_type.name == "TIME_SPECIFIC":
         if job.recurring:
-            trigger = DateTrigger(run_date=job.execution_time)
+            execution_time = datetime.strptime(
+                job.execution_time, "%Y-%m-%d %H:%M:%S")
+
+            # Specify the time at which the job should run every day
+            execution_time = time(
+                hour=execution_time.hour, minute=execution_time.minute, second=execution_time.second)
+
+            # Create an IntervalTrigger with a daily interval
+            trigger = IntervalTrigger(days=1, start_date=execution_time)
+
+            # Add the job with the recurring trigger
             job_scheduler_response = scheduler.add_job(
-                job_tasks.execute_job, args=[job.id], trigger=trigger, priority=job.priority)
+                job_tasks.execute_job, args=[
+                    job.id], trigger=trigger, priority=job.priority
+            )
+
             logger.info("Job has been scheduled: " +
                         str(job_scheduler_response))
             job_scheduler_response = job.job_scheduler_id = job_scheduler_response.id

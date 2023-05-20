@@ -18,9 +18,9 @@ kombu==5.2.4
 MarkupSafe==2.1.2
 pip==22.3
 prompt-toolkit==3.0.38
-psycopg2==2.9.6
+# psycopg2==2.9.6
 pydantic==1.10.7
-python-dotenv==1.0.0
+python-dotenv
 pytz==2023.3
 redis==4.5.5
 setuptools==65.5.0
@@ -35,3 +35,4 @@ uvicorn==0.22.0
 vine==5.0.0
 watchgod==0.8.2
 wcwidth==0.2.6
+psycopg2-binary

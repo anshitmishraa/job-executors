@@ -20,3 +20,5 @@ __pycache__/
 
 # Log File
 *.log
+
+.space

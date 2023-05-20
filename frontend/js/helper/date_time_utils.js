@@ -23,7 +23,6 @@ export function parseDateTime(timeString) {
     hour: "numeric",
     minute: "numeric",
     second: "numeric",
-    timeZone: "Asia/Kolkata", // Set the time zone to IST
   };
   const formattedTime = dateTime.toLocaleString(undefined, options); // Example output: "May 16, 2023, 5:41:12 PM"
 
