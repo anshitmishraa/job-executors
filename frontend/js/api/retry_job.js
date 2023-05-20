@@ -1,4 +1,5 @@
 import * as message from "../helper/message.js";
+import * as create_job_status_table from "../helper/create_job_status_table.js";
 
 export function retryJob(job_id) {
   // Send a request to cancel the job
@@ -13,7 +14,8 @@ export function retryJob(job_id) {
       }
     })
     .then((data) => {
-      message.showSuccess(data.message);
+      message.showSuccess(data.detail);
+      create_job_status_table.createTablesForStatuses();
     })
     .catch((error) => {
       message.showError(error);

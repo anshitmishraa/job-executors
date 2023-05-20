@@ -1,6 +1,7 @@
 import * as message from "../helper/message.js";
+import * as create_job_status_table from "../helper/create_job_status_table.js";
 
-export default function stopJob(job_id) {
+export function stopJob(job_id) {
   // Send a request to cancel the job
   fetch(`/jobs/stop-job/${job_id}`, { method: "POST" })
     .then((response) => {
@@ -13,7 +14,8 @@ export default function stopJob(job_id) {
       }
     })
     .then((data) => {
-      message.showSuccess(data.message);
+      message.showSuccess(data.detail);
+      create_job_status_table.createTablesForStatuses();
     })
     .catch((error) => {
       message.showError(error);

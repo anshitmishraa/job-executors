@@ -8,12 +8,15 @@ import * as create_job_api from "./api/create_job.js";
 import * as create_job_status_table from "./helper/create_job_status_table.js";
 
 const jobTypeSelect = document.getElementById("jobType");
+const executionTypeSelect = document.getElementById("executionType");
+
 const eventMapping = document.getElementById("event-mapping");
 const jobTypeElement = document.getElementById("job-type");
+const executionTimeElement = document.getElementById("job-execution-time");
 
-const executionTypeSelect = document.getElementById("executionType");
 const jobExecutionNameElement = document.getElementById("job-execution-name");
 const jobScript = document.getElementById("job-script");
+const executionTimeInput = document.getElementById("executionTime");
 
 jobTypeSelect.addEventListener("change", function () {
   const value = this.value;
@@ -33,10 +36,12 @@ executionTypeSelect.addEventListener("change", function () {
     eventMapping.style.display = "block";
     jobTypeElement.style.display = "none";
     jobExecutionNameElement.style.display = "none";
+    executionTimeElement.style.display = "none";
   } else {
     eventMapping.style.display = "none";
     jobTypeElement.style.display = "block";
     jobExecutionNameElement.style.display = "block";
+    executionTimeElement.style.display = "block";
   }
 });
 
@@ -47,7 +52,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   create_job_status_table.createTablesForStatuses();
 
-  const executionTimeInput = document.getElementById("executionTime");
   const currentDateTime = date_time_utils.getCurrentDateTime();
   executionTimeInput.min = currentDateTime;
   executionTimeInput.value = currentDateTime;

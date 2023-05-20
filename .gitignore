@@ -17,3 +17,6 @@ venv/
 
 # FastAPI
 __pycache__/
+
+# Log File
+*.log
