@@ -34,7 +34,7 @@ def run_script(result_job_type: JobType):
 
     try:
         # Execute the shell script
-        subprocess.run(['venv\Scripts\python', script_path],
+        subprocess.run(['bash', script_path],
                        check=True, shell=True)
 
     except subprocess.CalledProcessError as e:
