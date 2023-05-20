@@ -2,6 +2,10 @@
 <html>
   <head>
     <title>Job Management</title>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="upgrade-insecure-requests"
+    />
     <link
       href="{{ url_for('frontend', path='./css/styles.css') }}"
       rel="stylesheet"
@@ -95,7 +99,7 @@
           ></textarea>
         </div>
 
-        <div class="mb-4">
+        <div class="mb-4" id="job-execution-time">
           <label for="executionTime" class="font-semibold"
             >Execution Time:</label
           >

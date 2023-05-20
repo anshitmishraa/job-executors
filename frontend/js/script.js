@@ -37,6 +37,7 @@ executionTypeSelect.addEventListener("change", function () {
     jobTypeElement.style.display = "none";
     jobExecutionNameElement.style.display = "none";
     executionTimeElement.style.display = "none";
+    jobScript.style.display = "none";
   } else {
     eventMapping.style.display = "none";
     jobTypeElement.style.display = "block";

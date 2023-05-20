@@ -1,0 +1,16 @@
+# Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
+v: 0
+micros:
+  - name: job-executor
+    src: ./
+    engine: python3.9
+    primary: true
+    run: uvicorn main:app
+    dev: uvicorn main:app --reload
+    public_routes:
+      - "/*"
+    presets:
+      env:
+        - name: SQLALCHEMY_DATABASE_URL
+          description: DB URL
+          default: "postgresql://postgres:nndvhGgsQwW9PRxdcbzN@containers-us-west-197.railway.app:6679/railway"
