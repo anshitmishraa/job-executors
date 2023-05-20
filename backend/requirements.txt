@@ -35,3 +35,4 @@ uvicorn==0.22.0
 vine==5.0.0
 watchgod==0.8.2
 wcwidth==0.2.6
+pytest==6.2.4
