@@ -17,8 +17,8 @@ app = FastAPI()
 current_directory = os.getcwd()
 # Get the path of the parent directory
 parent_directory = os.path.dirname(current_directory)
-log.info(current_directory)
-log.info(parent_directory)
+logger.info(current_directory)
+logger.info(parent_directory)
 
 app.mount("/frontend", StaticFiles(directory="../frontend"), name="frontend")
 
@@ -26,7 +26,7 @@ app.mount("/frontend", StaticFiles(directory="../frontend"), name="frontend")
 @app.on_event("startup")
 async def startup():
     with get_database_connection() as db:
-        log.info("Startup: Connected to the database")
+        logger.info("Startup: Connected to the database")
 
 
 @app.on_event("shutdown")
@@ -40,7 +40,7 @@ async def shutdown():
 
         Note: This function is specific to the framework being used (e.g., FastAPI, Starlette).
     """
-    log.info("Shutdown: Cleaning up resources")
+    logger.info("Shutdown: Cleaning up resources")
 
 
 @app.get("/")
