@@ -18,7 +18,7 @@ export function scheduleJob(job_id) {
       }
     })
     .then((data) => {
-      message.showSuccess(data.message);
+      message.showSuccess(data.detail);
       create_job_status_table.createTablesForStatuses();
     })
     .catch((error) => {
