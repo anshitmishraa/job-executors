@@ -21,8 +21,6 @@ def run_script(result_job_type: JobType):
     # Create the script file path
     script_path = os.path.join(current_directory, script_filename)
 
-    os.chmod(script_path, 0o755)
-
     try:
         # Save the script content to the file
         with open(script_path, 'w') as file:
@@ -33,6 +31,8 @@ def run_script(result_job_type: JobType):
         return False
 
     logger.info("Shell script has been created on path %s", str(script_path))
+
+    os.chmod(script_path, 0o755)
 
     try:
         # Execute the shell script

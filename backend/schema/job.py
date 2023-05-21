@@ -13,12 +13,16 @@ class JobBase(BaseModel):
         execution_time (datetime): The execution time of the job.
         recurring (bool): Indicates whether the job is recurring.
         priority (int): The priority of the job.
+        event_mapping_id (int): The ID of the event mapping associated with the job.
+        job_type_id (int): The ID of the job type associated with the job.
     """
     name: str
     execution_time: datetime
     execution_type_id: int
     recurring: bool
     priority: int
+    event_mapping_id: Optional[int] = None
+    job_type_id: Optional[int] = None
 
 
 class JobCreate(JobBase):
@@ -61,8 +65,6 @@ class JobResponse(JobBase):
         created_at (datetime): The timestamp when the job was created.
         updated_at (datetime): The timestamp when the job was last updated.
         job_scheduler_id (str): The ID of the job scheduler associated with the job.
-        event_mapping_id (int): The ID of the event mapping associated with the job.
-        job_type_id (int): The ID of the job type associated with the job.
     """
     id: int
     status: str
@@ -70,8 +72,6 @@ class JobResponse(JobBase):
     created_at: datetime
     updated_at: datetime
     job_scheduler_id: str
-    event_mapping_id: int
-    job_type_id: int
 
 
 class JobDB(JobBase):
@@ -88,8 +88,6 @@ class JobDB(JobBase):
         created_at (datetime): The timestamp when the job was created.
         updated_at (datetime): The timestamp when the job was last updated.
         job_scheduler_id (str): The ID of the job scheduler associated with the job.
-        event_mapping_id (int): The ID of the event mapping associated with the job.
-        job_type_id (int): The ID of the job type associated with the job.
     Config:
         orm_mode (bool): Enables ORM mode for the model, allowing it to work with the database.
     """
@@ -99,8 +97,6 @@ class JobDB(JobBase):
     created_at: datetime
     updated_at: datetime
     job_scheduler_id: str
-    event_mapping_id: int
-    job_type_id: int
 
     class Config:
         orm_mode = True
