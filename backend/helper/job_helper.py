@@ -32,7 +32,7 @@ def create_job_schedule(job: Job, db):
     )
 
     event_mapping = (
-        db.query(EventMapping).filter(ExecutionType.id == job.event_mapping_id).first()
+        db.query(EventMapping).filter(EventMapping.id == job.event_mapping_id).first()
     )
 
     if execution_type.name == "TIME_SPECIFIC":
@@ -135,7 +135,7 @@ def update_job_schedule(job: Job, db):
     )
 
     event_mapping = (
-        db.query(EventMapping).filter(ExecutionType.id == job.event_mapping_id).first()
+        db.query(EventMapping).filter(EventMapping.id == job.event_mapping_id).first()
     )
 
     if execution_type.name == "TIME_SPECIFIC":
