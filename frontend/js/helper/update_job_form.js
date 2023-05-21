@@ -3,6 +3,7 @@ import * as date_time_utils from "../helper/date_time_utils.js";
 import * as job_type_api from "../api/job_types.js";
 import * as event_mapping_api from "../api/event_mapping.js";
 import * as update_job_api from "../api/update_job.js";
+import * as update_job_type_api from "../api/update_job_type.js";
 
 // Get the edit button and form elements
 const editFormPopup = document.getElementById("editFormPopup");
