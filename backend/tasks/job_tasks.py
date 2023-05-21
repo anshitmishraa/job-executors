@@ -45,68 +45,62 @@ def execute_job(job_id):
                     "Job Type or Event Mapping not found for job %s", result_job
                 )
 
-            result_job_type = job_type.to_json()
-            result_event_mapping = event_mapping.to_json()
-
             logger.info("Executing job: %s", result_job["name"])
             logger.info("Job details: %s", str(result_job))
-            logger.info("Job type details: %s", str(result_job_type))
 
-            if result_job["recurring"]:
-                result_job["excecution_time"] = result_job[
-                    "excecution_time"
-                ] + datetime.timedelta(days=1)
+            if not job_type:
+                result_job_type = job_type.to_json()
+                logger.info("Job type details: %s", str(result_job_type))
 
-                job_helper.create_job_schedule(result_job, db)
+                if result_job["recurring"]:
+                    result_job["excecution_time"] = result_job[
+                        "excecution_time"
+                    ] + datetime.timedelta(days=1)
 
-            # Execute the job based on its execution_type and other configuration
-            if result_job_type["job_type"] == "CODE":
-                if result_job_type["name"] == "COUNT_TILL_10":
-                    logger.info("Executing COUNT_TILL_10 job")
+                    job_helper.create_job_schedule(result_job, db)
 
-                    countTillTen = 0
+                # Execute the job based on its execution_type and other configuration
+                if result_job_type["job_type"] == "CODE":
+                    if result_job_type["name"] == "COUNT_TILL_10":
+                        logger.info("Executing COUNT_TILL_10 job")
 
-                    while countTillTen < 10:
-                        countTillTen = countTillTen + 1
+                        countTillTen = 0
 
-                        job.status = "Running"
+                        while countTillTen < 10:
+                            countTillTen = countTillTen + 1
 
-                    # Update the job status based on the API response
-                    if countTillTen == 10:
+                            job.status = "Running"
+
+                        # Update the job status based on the API response
+                        if countTillTen == 10:
+                            job.status = "Completed"
+                        else:
+                            job.status = "Failed"
+                elif result_job_type["job_type"] == "SCRIPT":
+                    logger.info("Executing SCRIPT job")
+
+                    if script.run_script(result_job_type):
                         job.status = "Completed"
                     else:
+                        logger.error("SCRIPT job failed")
+
                         job.status = "Failed"
-            elif result_job_type["job_type"] == "SCRIPT":
-                logger.info("Executing SCRIPT job")
+                if not result_event_mapping:
+                    result_event_mapping = event_mapping.to_json()
 
-                if script.run_script(result_job_type):
-                    job.status = "Completed"
-                else:
-                    logger.error("SCRIPT job failed")
+                # Handle event-based execution
+                elif event_mapping["name"] != None:
+                    result_event_mapping = event_mapping.to_json()
 
-                    job.status = "Failed"
-            # Handle event-based execution
-            elif event_mapping["name"] != None:
-                # Listen for the specific event
-                event_mapping = (
-                    db.query(EventMapping)
-                    .filter(EventMapping.id == result_job["event_mapping_id"])
-                    .first()
-                )
-                if not event_mapping:
-                    raise Exception("Event mapping not found")
+                    logger.info("Executing event job: %s", result_event_mapping["name"])
 
-                result_event_mapping = event_mapping.to_json()
+                    if result_event_mapping["name"] == "TRAIN_TICKET_CONFIRMATION":
+                        # Perform the job-specific logic here when the event occurs
+                        log.info("Train ticket has been sent to the customer over mail")
 
-                logger.info("Executing event job: %s", result_event_mapping["name"])
-
-                if result_event_mapping["name"] == "TRAIN_TICKET_CONFIRMATION":
-                    # Perform the job-specific logic here when the event occurs
-                    log.info("Train ticket has been sent to the customer over mail")
-
-                    # You can also update the job status during the execution if needed
-                    job.status = "Completed"
-                    db.commit()
+                        # You can also update the job status during the execution if needed
+                        job.status = "Completed"
+                        db.commit()
                 else:
                     # Handle the case when the event doesn't occur or handle the event not found scenario
                     job.status = "Failed"
