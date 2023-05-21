@@ -75,6 +75,21 @@ def execute_job(job_id):
                             job.status = "Completed"
                         else:
                             job.status = "Failed"
+                    elif result_job_type["name"] == "COUNT_TILL_5":
+                        logger.info("Executing COUNT_TILL_5 job")
+
+                        countTillFive = 0
+
+                        while countTillFive < 10:
+                            countTillFive = countTillFive + 1
+
+                            job.status = "Running"
+
+                        # Update the job status based on the API response
+                        if countTillFive == 5:
+                            job.status = "Completed"
+                        else:
+                            job.status = "Failed"
                 elif result_job_type["job_type"] == "SCRIPT":
                     logger.info("Executing SCRIPT job")
 
@@ -93,6 +108,15 @@ def execute_job(job_id):
 
                     # Perform the job-specific logic here when the event occurs
                     logger.info("Train ticket has been sent to the customer over mail")
+
+                    # You can also update the job status during the execution if needed
+                    job.status = "Completed"
+                    db.commit()
+                elif result_event_mapping["name"] == "FLIGHT_TICKET_CONFIRMATION":
+                    logger.info("Executing event job: %s", result_event_mapping["name"])
+
+                    # Perform the job-specific logic here when the event occurs
+                    logger.info("Flight ticket has been sent to the customer over mail")
 
                     # You can also update the job status during the execution if needed
                     job.status = "Completed"
