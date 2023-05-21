@@ -85,10 +85,9 @@ def execute_job(job_id):
                         logger.error("SCRIPT job failed")
 
                         job.status = "Failed"
-            elif result_event_mapping:
-                result_event_mapping = event_mapping.to_json()
-
+            elif event_mapping:
                 # Handle event-based execution
+
                 result_event_mapping = event_mapping.to_json()
 
                 logger.info("Executing event job: %s", result_event_mapping["name"])
