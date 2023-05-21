@@ -22,39 +22,51 @@ def execute_job(job_id):
         job_id (int): The ID of the job to execute.
         """
         try:
-
             job = db.query(Job).filter(Job.id == job_id).first()
             if not job:
                 raise Exception("Job not found")
 
             result_job = job.to_json()
 
-            job_type = db.query(JobType).filter(
-                JobType.id == result_job['job_type_id']).first()
-            if not job_type:
-                raise Exception("Job Type not found")
+            job_type = (
+                db.query(JobType)
+                .filter(JobType.id == result_job["job_type_id"])
+                .first()
+            )
+
+            event_mapping = (
+                db.query(JobType)
+                .filter(JobType.id == result_job["event_mapping_id"])
+                .first()
+            )
+
+            if not job_type and not event_mapping:
+                raise Exception(
+                    "Job Type or Event Mapping not found for job %s", result_job
+                )
 
             result_job_type = job_type.to_json()
+            result_event_mapping = event_mapping.to_json()
 
-            logger.info("Executing job: %s", result_job['name'])
+            logger.info("Executing job: %s", result_job["name"])
             logger.info("Job details: %s", str(result_job))
             logger.info("Job type details: %s", str(result_job_type))
 
-            if result_job['recurring']:
-                result_job['excecution_time'] = result_job['excecution_time'] + \
-                    datetime.timedelta(days=1)
+            if result_job["recurring"]:
+                result_job["excecution_time"] = result_job[
+                    "excecution_time"
+                ] + datetime.timedelta(days=1)
 
                 job_helper.create_job_schedule(result_job, db)
 
             # Execute the job based on its execution_type and other configuration
-            if result_job_type['job_type'] == "CODE":
-                if result_job_type['name'] == "COUNT_TILL_10":
+            if result_job_type["job_type"] == "CODE":
+                if result_job_type["name"] == "COUNT_TILL_10":
                     logger.info("Executing COUNT_TILL_10 job")
 
                     countTillTen = 0
 
                     while countTillTen < 10:
-
                         countTillTen = countTillTen + 1
 
                         job.status = "Running"
@@ -64,7 +76,7 @@ def execute_job(job_id):
                         job.status = "Completed"
                     else:
                         job.status = "Failed"
-            elif result_job_type['job_type'] == "SCRIPT":
+            elif result_job_type["job_type"] == "SCRIPT":
                 logger.info("Executing SCRIPT job")
 
                 if script.run_script(result_job_type):
@@ -73,23 +85,24 @@ def execute_job(job_id):
                     logger.error("SCRIPT job failed")
 
                     job.status = "Failed"
-                # Handle event-based execution
-            elif result_job_type['name'] == "EVENT_BASED":
+            # Handle event-based execution
+            elif event_mapping["name"] != None:
                 # Listen for the specific event
-                event_mapping = db.query(EventMapping).filter(
-                    EventMapping.id == result_job['event_mapping_id']).first()
+                event_mapping = (
+                    db.query(EventMapping)
+                    .filter(EventMapping.id == result_job["event_mapping_id"])
+                    .first()
+                )
                 if not event_mapping:
                     raise Exception("Event mapping not found")
 
                 result_event_mapping = event_mapping.to_json()
 
-                logger.info("Executing event job: %s",
-                            result_event_mapping['name'])
+                logger.info("Executing event job: %s", result_event_mapping["name"])
 
-                if result_event_mapping['name'] == 'TRAIN_TICKET_CONFIRMATION':
+                if result_event_mapping["name"] == "TRAIN_TICKET_CONFIRMATION":
                     # Perform the job-specific logic here when the event occurs
-                    log.info(
-                        "Train ticket has been sent to the customer over mail")
+                    log.info("Train ticket has been sent to the customer over mail")
 
                     # You can also update the job status during the execution if needed
                     job.status = "Completed"
@@ -110,6 +123,5 @@ def execute_job(job_id):
         except Exception as e:
             db.rollback()
             job.status = "Failed"
-            logger.exception(
-                "An error occurred during job execution: %s", str(e))
+            logger.exception("An error occurred during job execution: %s", str(e))
             raise
