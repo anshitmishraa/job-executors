@@ -6,7 +6,6 @@ from backend.config.db import get_database_connection
 from backend.models.job import Job
 from backend.models.job import JobType
 from backend.script import run_script as script
-from backend.tasks import event_listener
 from backend.models.job import EventMapping
 
 load_dotenv()
