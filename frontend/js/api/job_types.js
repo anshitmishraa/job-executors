@@ -53,20 +53,22 @@ export async function jobTypefromId(jobTypeId) {
 }
 
 export async function updateJobTypes(existingjobType) {
-  const fetchAlljobTypes = await jobTypes();
+  const fetchAllJobTypes = await jobTypes();
 
-  const updateJobTypeSelect = document.getElementById("upateJobType");
+  const updateJobExecutionNameSelect = document.getElementById(
+    "updateJobExecutionName"
+  );
 
   // Iterate over the job types and create <option> elements
   fetchAllJobTypes.forEach((jobType) => {
     if (jobType.job_type == "CODE") {
       const option = document.createElement("option");
       option.value = jobType.id; // Set the value to the job type ID
-      option.textContent = string_utils.parsejobType(jobType.name); // Set the text to the job type name
-      if (string_utils.parsejobType(jobType.name) == existingjobType) {
+      option.textContent = string_utils.parseExecutionType(jobType.name); // Set the text to the job type name
+      if (jobType.name == existingjobType) {
         option.selected = true;
       }
-      jobTypeSelect.appendChild(option);
+      updateJobExecutionName.appendChild(option);
     }
   });
 }

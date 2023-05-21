@@ -2,6 +2,7 @@ import * as execution_type_api from "../api/execution_types.js";
 import * as date_time_utils from "../helper/date_time_utils.js";
 import * as job_type_api from "../api/job_types.js";
 import * as event_mapping_api from "../api/event_mapping.js";
+import * as update_job_api from "../api/update_job.js";
 
 // Get the edit button and form elements
 const editFormPopup = document.getElementById("editFormPopup");
@@ -16,11 +17,63 @@ cancelButton.addEventListener("click", () => {
 
 // Add event listener to the update button (submitting the form)
 updateButton.addEventListener("click", () => {
-  // Perform the update operation
-  // ...
+  event.preventDefault();
 
-  // Hide the edit form popup
-  editFormPopup.classList.add("hidden");
+  const id = document.getElementById("updateJobId").value;
+  const job_scheduler_id = document.getElementById(
+    "updateJobSchedulerId"
+  ).value;
+  const status = document.getElementById("updateJobStatus").value;
+
+  const name = document.getElementById("updateJobName").value;
+  const job_type_id = document.getElementById("updateJobExecutionName").value;
+  const execution_type_id = document.getElementById(
+    "updateExecutionTypeId"
+  ).value;
+  const event_mapping_id = document.getElementById("updateEventMapping").value;
+  const execution_time = date_time_utils.convertCurrentTimeToUTC(
+    document.getElementById("updateExecutionTime").value
+  );
+  const recurring = document.getElementById("updateRecurring").checked;
+  const priority = document.getElementById("updatePriority").value;
+  const job_type_value = document.getElementById("updateJobType").value;
+  const script = document.getElementById("updateJobScript").value;
+
+  const event_based_job = {
+    id,
+    name,
+    execution_type_id,
+    event_mapping_id,
+    priority,
+  };
+
+  const time_based_job = {
+    id,
+    name,
+    job_type_id,
+    execution_type_id,
+    execution_time,
+    recurring,
+    priority,
+    job_scheduler_id,
+    status,
+  };
+
+  const job_type = {
+    name,
+    job_type: job_type_value,
+    script,
+  };
+
+  if (job_type_value == "SCRIPT") {
+    update_job_type_api.updateJobType(job_type, time_based_job);
+  } else {
+    if (execution_type_id == 2) {
+      update_job_api.updateJob(event_based_job);
+    } else {
+      update_job_api.updateJob(time_based_job);
+    }
+  }
 });
 
 export async function showEditForm(job) {
@@ -30,13 +83,28 @@ export async function showEditForm(job) {
   const updateJobNameField = document.getElementById("updateJobName");
   updateJobNameField.value = job.name;
 
+  const updateJobIdField = document.getElementById("updateJobId");
+  updateJobIdField.value = job.id;
+
+  const updateJobSchedulerIdField = document.getElementById(
+    "updateJobSchedulerId"
+  );
+  updateJobSchedulerIdField.value = job.job_scheduler_id;
+
+  const updateJobStatusField = document.getElementById("updateJobStatus");
+  updateJobStatusField.value = job.status;
+
   const updateExecutionTypeField = document.getElementById(
     "updateExecutionType"
+  );
+  const updateExecutionTypeIdField = document.getElementById(
+    "updateExecutionTypeId"
   );
   const executionType = await execution_type_api.executionTypefromId(
     job.execution_type_id
   );
   updateExecutionTypeField.value = executionType.name;
+  updateExecutionTypeIdField.value = executionType.id;
 
   const updateJobTypeField = document.getElementById("updateJobType");
   const updateJobTypeElement = document.getElementById("update-job-type");
@@ -75,12 +143,14 @@ export async function showEditForm(job) {
     } else if (jobType.job_type == "SCRIPT") {
       updateJobScriptField.value = jobType.script;
       updateJobScriptFieldElement.style.display = "block";
+      updateJobExecutionNameElement.style.display = "none";
+      updateEventMappingElement.style.display = "none";
     }
   } else if (executionType.name == "EVENT_BASED") {
     const eventMapping = await event_mapping_api.eventMappingfromId(
       job.event_mapping_id
     );
-    event_mapping_api.updateEventMapping(jobType.name);
+    event_mapping_api.updateEventMapping(eventMapping.name);
     updateEventMappingField.value = eventMapping.name;
     updateEventMappingElement.style.display = "block";
     updateJobExecutionNameElement.style.display = "none";

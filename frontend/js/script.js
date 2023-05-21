@@ -53,7 +53,7 @@ executionTypeSelect.addEventListener("change", function () {
 document.addEventListener("DOMContentLoaded", function () {
   job_type_api.createJobTypes();
   execution_type_api.createExecutionTypes();
-  event_mapping_api.eventMapping();
+  event_mapping_api.createEventMapping();
 
   create_job_status_table.createTablesForStatuses();
 

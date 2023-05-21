@@ -1,7 +1,14 @@
 #editFormPopup {
-  z-index: 9999;
+  z-index: 999;
 }
 
 .hidden {
   display: none;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
 }

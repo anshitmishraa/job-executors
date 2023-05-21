@@ -1,12 +1,13 @@
 import * as message from "../helper/message.js";
-import * as create_job_status_table from "../helper/create_job_status_table.js";
+import * as update_job_api from "./update_job.js";
 
-export function updateScheduleJob(job_id) {
-  fetch(`/jobs/update-schedule-job/${job_id}`, {
-    method: "POST",
+export function updateJobType(job_type, job) {
+  fetch(`/job_types/${job.job_type_id}`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify(job_type),
   })
     .then((response) => {
       if (response.ok) {
@@ -18,9 +19,8 @@ export function updateScheduleJob(job_id) {
       }
     })
     .then((data) => {
-      editFormPopup.classList.add("hidden");
-      message.showSuccess(data.detail);
-      create_job_status_table.createTablesForStatuses();
+      job.job_type_id = data.id;
+      update_job_api.updateJob(job);
     })
     .catch((error) => {
       message.showError(error);
