@@ -19,7 +19,6 @@ export function updateJob(job) {
       }
     })
     .then((data) => {
-      console.log(data);
       update_schedule_job_api.updateScheduleJob(data.id);
     })
     .catch((error) => {

@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class JobTypeBase(BaseModel):
@@ -9,8 +10,11 @@ class JobTypeBase(BaseModel):
         name (str): The name of the job type.
         job_type (str): The type of the job.
     """
+
     name: str
     job_type: str
+    script: Optional[str] = None
+    description: Optional[str] = None
 
 
 class JobTypeCreate(JobTypeBase):
@@ -20,6 +24,7 @@ class JobTypeCreate(JobTypeBase):
     Inherits:
         JobTypeBase: Base model for job types.
     """
+
     script: str
     pass
 
@@ -31,6 +36,7 @@ class JobTypeUpdate(JobTypeBase):
     Inherits:
         JobTypeBase: Base model for job types.
     """
+
     pass
 
 
@@ -46,6 +52,7 @@ class JobTypeResponse(JobTypeBase):
         script (str): The script associated with the job type.
         description (str): The description of the job type.
     """
+
     id: int
     script: str
     description: str
@@ -66,6 +73,7 @@ class JobTypeDB(JobTypeBase):
     Config:
         orm_mode (bool): Enables ORM mode for the model, allowing it to work with the database.
     """
+
     id: int
     script: str
     description: str
