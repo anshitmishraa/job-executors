@@ -14,6 +14,7 @@ export const getCurrentDateTime = function () {
 };
 
 export function parseDateTime(timeString) {
+  timeString = timeString + "Z";
   const date = new Date(timeString);
   const istDate = date.toLocaleString("en-IN", {
     timeZone: "Asia/Kolkata",
