@@ -27,7 +27,7 @@ jobTypeSelect.addEventListener("change", function () {
     jobScript.style.display = "block";
   } else {
     jobExecutionNameElement.style.display = "block";
-    jobScript.style.display = "block";
+    jobScript.style.display = "none";
   }
 });
 
@@ -51,8 +51,8 @@ executionTypeSelect.addEventListener("change", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  job_type_api.jobTypes();
-  execution_type_api.executionTypes();
+  job_type_api.createJobTypes();
+  execution_type_api.createExecutionTypes();
   event_mapping_api.eventMapping();
 
   create_job_status_table.createTablesForStatuses();
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const event_based_job = {
       name,
-      job_type_id,
+      execution_type_id,
       event_mapping_id,
       priority,
     };
