@@ -160,6 +160,8 @@ export async function showEditForm(job) {
     updateJobExecutionNameElement.style.display = "none";
     updateJobExecutionTimeElement.style.display = "none";
     updateJobRecurringElement.style.display = "none";
+    updateJobTypeElement.style.display = "none";
+    updateJobScriptFieldElement.style.display = "none";
   }
 
   const currentDateTime = date_time_utils.getCurrentDateTime();
