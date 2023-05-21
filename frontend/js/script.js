@@ -102,9 +102,13 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     if (job_type_value == "SCRIPT") {
-      create_job_type_api.createJobType(job_type, job);
+      create_job_type_api.createJobType(job_type, time_based_job);
     } else {
-      create_job_api.createJob(job);
+      if (execution_type_id == 2) {
+        create_job_api.createJob(event_based_job);
+      } else {
+        create_job_api.createJobType(time_based_job);
+      }
     }
   });
 });
