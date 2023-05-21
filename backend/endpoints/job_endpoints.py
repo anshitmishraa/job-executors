@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import distinct
 
 from backend.config.db import get_database_connection
@@ -61,26 +61,8 @@ async def create_job(job: JobCreate):
         with get_database_connection() as db:
             logger.info("Request received to create a job: %s", str(job))
 
-            current_time = datetime.now(datetime.timezone.utc)
+            current_time = datetime.now(timezone.utc)
             execution_time = job.execution_time
-
-            if job.event_mapping_id == None:
-                # Check if a job execution time is less than the current time
-                if execution_time <= current_time:
-                    logger.warning(
-                        "Execution time should be greater than the current time: %s", execution_time)
-                    raise HTTPException(
-                        status_code=500, detail="Please select the execution time which is greater than current time")
-            else:
-                # Check if a job event has been already associated with another job
-
-                existing_job_mapping = db.query(Job).filter(
-                    Job.event_mapping_id == job.event_mapping_id).first()
-                if existing_job_mapping:
-                    logger.warning(
-                        "A job with the same event has already exists: %s", job.name)
-                    raise HTTPException(
-                        status_code=500, detail="A job with the same event has already exists")
 
             # Check if a job with the same name already exists
             existing_job = db.query(Job).filter(Job.name == job.name).first()
@@ -91,6 +73,23 @@ async def create_job(job: JobCreate):
                     status_code=500, detail="A job with the same name already exists")
 
             db_job = Job(**job.dict())
+
+            if db_job.event_mapping_id == None:
+                # Check if a job execution time is less than the current time
+                if execution_time <= current_time:
+                    logger.warning(
+                        "Execution time should be greater than the current time: %s", execution_time)
+                    raise HTTPException(
+                        status_code=500, detail="Please select the execution time which is greater than current time")
+            else:
+                # Check if a job event has been already associated with another job
+                existing_job_mapping = db.query(Job).filter(
+                    Job.event_mapping_id == db_job.event_mapping_id).first()
+                if existing_job_mapping:
+                    logger.warning(
+                        "A job with the same event has already exists: %s", db_job.name)
+                    raise HTTPException(
+                        status_code=500, detail="A job with the same event has already exists")
 
             if db.query(ExecutionType).filter(ExecutionType.id == db_job.execution_type_id).first().to_json()['name'] == 'EVENT_BASED':
                 if db_job.event_mapping_id is None:
