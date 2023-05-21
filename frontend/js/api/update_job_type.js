@@ -2,7 +2,9 @@ import * as message from "../helper/message.js";
 import * as update_job_api from "./update_job.js";
 
 export function updateJobType(job_type, job) {
-  fetch(`/job_types/${job.job_type_id}`, {
+  const job_type_id = job.job_type_id;
+
+  fetch(`/job_types/${job_type_id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
