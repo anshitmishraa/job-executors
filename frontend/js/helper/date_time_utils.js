@@ -3,6 +3,18 @@ export const convertCurrentTimeToUTC = (time) => {
   return new Date(newTime).toISOString();
 };
 
+export const convertCurrentTimeUTCToIST = (time) => {
+  time = time + "Z";
+
+  let utcDate = new Date(time);
+  let istOffset = 5.5 * 60 * 60 * 1000; // IST offset is 5 hours 30 minutes ahead of UTC
+  let istDate = new Date(utcDate.getTime() + istOffset);
+
+  let formattedDateString = istDate.toISOString();
+  
+  return formattedDateString;
+};
+
 export const getCurrentDateTime = function () {
   const now = new Date();
   const year = now.getFullYear();
