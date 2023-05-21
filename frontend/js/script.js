@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (execution_type_id == 2) {
         create_job_api.createJob(event_based_job);
       } else {
-        create_job_api.createJobType(time_based_job);
+        create_job_api.createJob(time_based_job);
       }
     }
   });
