@@ -92,7 +92,7 @@ def execute_job(job_id):
                     logger.info("Executing event job: %s", result_event_mapping["name"])
 
                     # Perform the job-specific logic here when the event occurs
-                    log.info("Train ticket has been sent to the customer over mail")
+                    logger.info("Train ticket has been sent to the customer over mail")
 
                     # You can also update the job status during the execution if needed
                     job.status = "Completed"
