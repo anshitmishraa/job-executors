@@ -48,7 +48,7 @@ def execute_job(job_id):
             logger.info("Executing job: %s", result_job["name"])
             logger.info("Job details: %s", str(result_job))
 
-            if not job_type:
+            if job_type:
                 result_job_type = job_type.to_json()
                 logger.info("Job type details: %s", str(result_job_type))
 
@@ -85,22 +85,21 @@ def execute_job(job_id):
                         logger.error("SCRIPT job failed")
 
                         job.status = "Failed"
-                if not result_event_mapping:
-                    result_event_mapping = event_mapping.to_json()
+            elif result_event_mapping:
+                result_event_mapping = event_mapping.to_json()
 
                 # Handle event-based execution
-                elif event_mapping["name"] != None:
-                    result_event_mapping = event_mapping.to_json()
+                result_event_mapping = event_mapping.to_json()
 
-                    logger.info("Executing event job: %s", result_event_mapping["name"])
+                logger.info("Executing event job: %s", result_event_mapping["name"])
 
-                    if result_event_mapping["name"] == "TRAIN_TICKET_CONFIRMATION":
-                        # Perform the job-specific logic here when the event occurs
-                        log.info("Train ticket has been sent to the customer over mail")
+                if result_event_mapping["name"] == "TRAIN_TICKET_CONFIRMATION":
+                    # Perform the job-specific logic here when the event occurs
+                    log.info("Train ticket has been sent to the customer over mail")
 
-                        # You can also update the job status during the execution if needed
-                        job.status = "Completed"
-                        db.commit()
+                    # You can also update the job status during the execution if needed
+                    job.status = "Completed"
+                    db.commit()
                 else:
                     # Handle the case when the event doesn't occur or handle the event not found scenario
                     job.status = "Failed"
