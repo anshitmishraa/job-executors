@@ -19,11 +19,4 @@ export function executionTypes() {
     });
 }
 
-export function executionTypefromId(executionTypeId) {
-  // Fetch the execution types from the backend
-  fetch("/execution_types/${executionTypeId}")
-    .then((response) => response.json())
-    .then((data) => {
-      return data;
-    });
-}
+

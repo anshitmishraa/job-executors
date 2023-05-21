@@ -31,3 +31,15 @@ export function jobTypes() {
       });
     });
 }
+
+// Fetch the job type from id from the backend
+export async function jobTypefromId (jobTypeId) {
+  try {
+      const response = await fetch(`/job_types/${jobTypeId}`)
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      message.showError(error);
+      return null;
+    }
+}
