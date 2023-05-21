@@ -3,7 +3,8 @@ import * as retry_job_api from "../api/retry_job.js";
 import * as stop_job_api from "../api/stop_job.js";
 import * as constant from "../helper/constant.js";
 import * as date_time_utils from "../helper/date_time_utils.js";
-import * as update_job from "../helper/update_job.js";
+import * as update_job_form from "./update_job_form.js";
+import * as execution_type_api from "../api/execution_types.js";
 
 // Fetch the job list from the backend
 export async function createTablesForStatuses() {
@@ -46,6 +47,11 @@ export async function createTablesForStatuses() {
           jobNameHeader.className = "py-2 px-4 border-b bg-gray-100 text-left";
           jobNameHeader.textContent = "Job Name";
 
+          const jobExecutionTypeHeader = document.createElement("th");
+          jobExecutionTypeHeader.className =
+            "py-2 px-4 border-b bg-gray-100 text-left";
+          jobExecutionTypeHeader.textContent = "Job Execution Type";
+
           const jobTimeHeader = document.createElement("th");
           jobTimeHeader.className = "py-2 px-4 border-b bg-gray-100 text-left";
 
@@ -75,6 +81,8 @@ export async function createTablesForStatuses() {
           actionsHeader.textContent = "Actions";
 
           headerRow.appendChild(jobNameHeader);
+          headerRow.appendChild(jobExecutionTypeHeader);
+
           if (
             status === "Failed" ||
             status === "Completed" ||
@@ -98,12 +106,36 @@ export async function createTablesForStatuses() {
           const jobs = data.filter((job) => job.status === status);
 
           // Iterate over the filtered jobs and create HTML elements for each job
-          jobs.forEach((job) => {
+          jobs.forEach(async (job) => {
             const listItem = document.createElement("tr");
 
             const jobName = document.createElement("td");
             jobName.className = "py-2 px-4 border-b text-left";
             jobName.textContent = job.name;
+
+            const jobExecutionType = document.createElement("td");
+            jobExecutionType.className = "py-2 px-4 border-b text-left";
+
+            const executionType = await execution_type_api.executionTypefromId(
+              job.execution_type_id
+            );
+
+            if (executionType.name == "TIME_SPECIFIC") {
+              const timeSpecificJobExecutionType =
+                document.createElement("span");
+              timeSpecificJobExecutionType.className =
+                "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800";
+              timeSpecificJobExecutionType.textContent = "Time Specific";
+
+              jobExecutionType.append(timeSpecificJobExecutionType);
+            } else if (executionType.name == "EVENT_BASED") {
+              const eventBasedJoBExecutionType = document.createElement("span");
+              eventBasedJoBExecutionType.className =
+                "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800";
+              eventBasedJoBExecutionType.textContent = "Event Based";
+
+              jobExecutionType.append(eventBasedJoBExecutionType);
+            }
 
             const jobTime = document.createElement("td");
             jobTime.className = "py-2 px-4 border-b text-left";
@@ -169,7 +201,7 @@ export async function createTablesForStatuses() {
               "editButton bg-blue-500 text-white py-1 px-2 rounded mr-4";
             editButton.textContent = "Edit";
             editButton.onclick = function () {
-              update_job.showEditForm(job);
+              update_job_form.showEditForm(job);
             };
 
             const actionsColumn = document.createElement("td");
@@ -186,6 +218,8 @@ export async function createTablesForStatuses() {
             }
 
             listItem.appendChild(jobName);
+            listItem.appendChild(jobExecutionType);
+
             if (
               status === "Failed" ||
               status === "Completed" ||
