@@ -22,12 +22,12 @@ const jobRecurringElement = document.getElementById("job-recurring");
 
 jobTypeSelect.addEventListener("change", function () {
   const value = this.value;
-  if (value != "Code") {
-    jobExecutionNameElement.style.display = "none";
-    jobScript.style.display = "block";
-  } else {
+  if (value === "CODE") {
     jobExecutionNameElement.style.display = "block";
     jobScript.style.display = "none";
+  } else if (value === "SCRIPT") {
+    jobExecutionNameElement.style.display = "none";
+    jobScript.style.display = "block";
   }
 });
 

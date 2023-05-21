@@ -68,7 +68,7 @@ export async function updateJobTypes(existingjobType) {
       if (jobType.name == existingjobType) {
         option.selected = true;
       }
-      updateJobExecutionName.appendChild(option);
+      updateJobExecutionNameSelect.appendChild(option);
     }
   });
 }
