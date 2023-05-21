@@ -123,7 +123,7 @@ async def update_job(job_id: int, updated_job: JobUpdate):
                 str(job_id),
                 str(updated_job),
             )
-            job_validation.validate_job_name(db, updated_job.name)
+            job_validation.validate_existing_job_name(db, updated_job)
 
             if updated_job.event_mapping_id == None:
                 job_validation.validate_execution_time(updated_job.execution_time)

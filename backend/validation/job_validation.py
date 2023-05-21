@@ -40,3 +40,11 @@ def validate_event_mapping_required(execution_type, event_mapping_id):
         raise HTTPException(
             status_code=500, detail="Event mapping is mandatory for EVENT_BASED jobs"
         )
+
+
+def validate_existing_job_name(db, job):
+    existing_job = db.query(Job).filter(Job.name == job.name).first()
+    if existing_job.id != job.id:
+        raise HTTPException(
+            status_code=500, detail="A job with the same name already exists"
+        )
