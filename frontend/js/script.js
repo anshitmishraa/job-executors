@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const job_type_id = document.getElementById("jobExecutionName").value;
     const execution_type_id = document.getElementById("executionType").value;
     const event_mapping_id = document.getElementById("eventMapping").value;
-    const execution_time = convertCurrentTimeToUTC(
+    const execution_time = date_time_utils.convertCurrentTimeToUTC(
       document.getElementById("executionTime").value
     );
     const recurring = document.getElementById("recurring").checked;
