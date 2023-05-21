@@ -29,7 +29,9 @@ class JobCreate(JobBase):
 
     Inherits:
         JobBase: Base model for jobs.
+        event_mapping_id (int): The ID of the event mapping associated with the job.
     """
+    event_mapping_id: int
     pass
 
 

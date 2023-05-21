@@ -1,7 +1,8 @@
 from apscheduler.triggers.date import DateTrigger
 from apscheduler.schedulers.background import BackgroundScheduler
-from datetime import datetime
+from datetime import datetime, time, timedelta
 from apscheduler.triggers.interval import IntervalTrigger
+from apscheduler.triggers.base import BaseTrigger
 
 from backend.models.job import ExecutionType, EventMapping
 from backend.models.job import Job
@@ -32,15 +33,18 @@ def create_job_schedule(job: Job, db):
 
     if execution_type.name == "TIME_SPECIFIC":
         if job.recurring:
-            execution_time = datetime.strptime(
-                job.execution_time, "%Y-%m-%d %H:%M:%S")
-
             # Specify the time at which the job should run every day
-            execution_time = time(
-                hour=execution_time.hour, minute=execution_time.minute, second=execution_time.second)
+            execution_time = time(hour=job.execution_time.hour,
+                                  minute=job.execution_time.minute, second=job.execution_time.second)
+
+            # Get the current date
+            current_date = datetime.now().date()
+
+            # Combine the current date and execution time to create a datetime object
+            execution_datetime = datetime.combine(current_date, execution_time)
 
             # Create an IntervalTrigger with a daily interval
-            trigger = IntervalTrigger(days=1, start_date=execution_time)
+            trigger = IntervalTrigger(days=1, start_date=execution_datetime)
 
             # Add the job with the recurring trigger
             job_scheduler_response = scheduler.add_job(
@@ -50,7 +54,7 @@ def create_job_schedule(job: Job, db):
 
             logger.info("Job has been scheduled: " +
                         str(job_scheduler_response))
-            job_scheduler_response = job.job_scheduler_id = job_scheduler_response.id
+            job.job_scheduler_id = job_scheduler_response.id
         else:
             trigger = DateTrigger(
                 run_date=job.execution_time)
@@ -61,13 +65,20 @@ def create_job_schedule(job: Job, db):
             job.job_scheduler_id = job_scheduler_response.id
 
     elif execution_type.name == "EVENT_BASED":
-        # Schedule the job to execute when the specified event occurs
-        job_scheduler_response = scheduler.add_job(job_tasks.execute_job, args=[],
-                                                   priority=job.priority, trigger='event', event_name=event_mapping.name)
+        # Replace 60*60 with the desired delay in seconds
+        future_datetime = datetime.now() + timedelta(weeks=100)
+
+        trigger = DateTrigger(
+            run_date=future_datetime)
+
+        job_scheduler_response = scheduler.add_job(
+            job_tasks.execute_job, trigger=trigger, args=[job.id], priority=job.priority)
 
         logger.info("Job has been scheduled: " + str(job_scheduler_response))
 
         job.job_scheduler_id = job_scheduler_response.id
+
+        job.execution_time = future_datetime
 
     db.commit()
 
@@ -95,3 +106,65 @@ def stop_job_scheduler(job: Job, db):
         # Step 4: Log the error if an exception occurs
         logger.exception(
             f"An error occurred while stopping job scheduler: {str(e)}")
+
+
+def update_job_schedule(job: Job, db):
+    """
+    Update a scheduled for a job based on its execution type.
+
+    Args:
+        job (Job): The job to schedule.
+        db: The database connection.
+
+    Raises:
+        Exception: If an invalid execution type is provided.
+    """
+    execution_type = db.query(ExecutionType).filter(
+        ExecutionType.id == job.execution_type_id).first()
+
+    event_mapping = db.query(EventMapping).filter(
+        ExecutionType.id == job.event_mapping_id).first()
+
+    if execution_type.name == "TIME_SPECIFIC":
+        if job.recurring:
+            # Specify the time at which the job should run every day
+            execution_time = time(hour=job.execution_time.hour,
+                                  minute=job.execution_time.minute, second=job.execution_time.second)
+
+            # Get the current date
+            current_date = datetime.now().date()
+
+            # Combine the current date and execution time to create a datetime object
+            execution_datetime = datetime.combine(current_date, execution_time)
+
+            # Create an IntervalTrigger with a daily interval
+            trigger = IntervalTrigger(days=1, start_date=execution_datetime)
+
+            # Add the job with the recurring trigger
+            job_scheduler_response = scheduler.modify_job(
+                job.job_scheduler_id, trigger=trigger, priority=job.priority
+            )
+
+            logger.info("Job has been scheduled: " +
+                        str(job_scheduler_response))
+            job.job_scheduler_id = job_scheduler_response.id
+        else:
+            trigger = DateTrigger(
+                run_date=job.execution_time)
+            job_scheduler_response = scheduler.modify_job(
+                job.job_scheduler_id, trigger=trigger, priority=job.priority)
+            logger.info("Job has been scheduled: " +
+                        str(job_scheduler_response))
+            job.job_scheduler_id = job_scheduler_response.id
+
+    elif execution_type.name == "EVENT_BASED":
+        future_datetime = time.time() + 60*60
+
+        job_scheduler_response = scheduler.modify_job(
+            job.job_scheduler_id, 'date', run_date=future_datetime, args=[job.id], priority=job.priority)
+
+        logger.info("Job has been scheduled: " + str(job_scheduler_response))
+
+        job.job_scheduler_id = job_scheduler_response.id
+
+    db.commit()

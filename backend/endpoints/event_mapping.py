@@ -118,4 +118,4 @@ async def delete_event_mapping(event_mapping_id: int):
                 status_code=404, detail="Event Mapping not found")
         db.delete(event_mapping)
         db.commit()
-        return {"message": "Event Mapping deleted"}
+        return {"detail": "Event Mapping deleted"}

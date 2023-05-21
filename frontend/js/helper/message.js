@@ -1,9 +1,8 @@
 // Function to show the success message and automatically hide it after a delay
 export const showSuccess = function (message) {
   const successContainer = document.getElementById("success-message");
-  const successMessage = successContainer.querySelector(".success-message");
 
-  successMessage.textContent = message;
+  successContainer.textContent = message;
   successContainer.style.display = "block";
 
   setTimeout(function () {

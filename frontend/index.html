@@ -24,9 +24,7 @@
       id="success-message"
       style="display: none; position: fixed; width: 50%; z-index: 9999"
       role="alert"
-    >
-      <span class="success-message" class="block sm:inline"></span>
-    </div>
+    ></div>
 
     <!-- Error message -->
     <div
@@ -113,7 +111,7 @@
           />
         </div>
 
-        <div class="mb-4">
+        <div class="mb-4" id="job-recurring">
           <label for="recurring" class="font-semibold">Recurring:</label>
           <input
             type="checkbox"
@@ -145,6 +143,54 @@
           Create
         </button>
       </form>
+    </div>
+
+    <!-- Update Job Form Popup -->
+    <div
+      id="editFormPopup"
+      class="hidden fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-500 bg-opacity-50"
+    >
+      <div class="bg-white px-8 py-4 rounded shadow">
+        <!-- Update Job fields... -->
+        <div class="mb-4" id="update-job-name">
+          <label for="updateJobName" class="font-semibold">Job Name:</label>
+          <input
+            type="text"
+            id="updateJobName"
+            required
+            class="border border-gray-300 px-3 py-2 rounded w-full"
+          />
+        </div>
+
+        <div class="mb-4">
+          <label
+            for="updateExecutionType"
+            class="font-semibold"
+            id="update-execution-type"
+            >Execution Type:</label
+          >
+          <input
+            disabled
+            type="text"
+            id="updateExecutionType"
+            class="border border-gray-300 px-3 py-2 rounded w-full"
+          />
+          <!-- JavaScript code will dynamically populate the options here -->
+        </div>
+
+        <button
+          id="updateButton"
+          class="bg-blue-500 text-white py-2 px-4 rounded"
+        >
+          Update
+        </button>
+        <button
+          id="cancelButton"
+          class="bg-gray-500 text-white py-2 px-4 rounded ml-2"
+        >
+          Cancel
+        </button>
+      </div>
     </div>
 
     <div class="mx-8 my-4">

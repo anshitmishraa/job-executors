@@ -1,13 +1,16 @@
 from fastapi import APIRouter, HTTPException
-from datetime import datetime, timezone
+from datetime import datetime
 from sqlalchemy import distinct
 
 from backend.config.db import get_database_connection
 from backend.schema.job import JobCreate, JobUpdate
-from backend.tasks.job_tasks import execute_job
 from backend.models.job import Job
 from backend.models.job import ExecutionType
 from backend.helper import constants, job_helper, log
+from backend.tasks.job_tasks import execute_job
+from backend.config.db import get_database_connection
+from backend.models.job import EventMapping
+
 
 router = APIRouter()
 logger = log.setup_logging()
@@ -58,14 +61,26 @@ async def create_job(job: JobCreate):
         with get_database_connection() as db:
             logger.info("Request received to create a job: %s", str(job))
 
-            current_time = datetime.now(timezone.utc)
+            current_time = datetime.now()
             execution_time = job.execution_time
 
-            if execution_time <= current_time:
-                logger.warning(
-                    "Execution time should be greater than the current time: %s", execution_time)
-                raise HTTPException(
-                    status_code=500, detail="Please select the execution time which is greater than current time")
+            if job.event_mapping_id == None:
+                # Check if a job execution time is less than the current time
+                if execution_time <= current_time:
+                    logger.warning(
+                        "Execution time should be greater than the current time: %s", execution_time)
+                    raise HTTPException(
+                        status_code=500, detail="Please select the execution time which is greater than current time")
+            else:
+                # Check if a job event has been already associated with another job
+
+                existing_job_mapping = db.query(Job).filter(
+                    Job.event_mapping_id == job.event_mapping_id).first()
+                if existing_job_mapping:
+                    logger.warning(
+                        "A job with the same event has already exists: %s", job.name)
+                    raise HTTPException(
+                        status_code=500, detail="A job with the same event has already exists")
 
             # Check if a job with the same name already exists
             existing_job = db.query(Job).filter(Job.name == job.name).first()
@@ -98,6 +113,8 @@ async def create_job(job: JobCreate):
         raise HTTPException(status_code=e.status_code, detail=e.detail)
 
     except Exception as e:
+        db.rollback()
+
         logger.exception(
             "Failed to create a job: %s", str(e))
         raise HTTPException(
@@ -142,6 +159,8 @@ async def update_job(job_id: int, updated_job: JobUpdate):
             "Failed to update a job: %s", str(e))
         raise HTTPException(status_code=e.status_code, detail=e.detail)
     except Exception as e:
+        db.rollback()
+
         logger.exception(
             "Failed to update a job: %s", str(e))
         raise HTTPException(
@@ -240,7 +259,7 @@ async def delete_job(job_id: int):
             db.delete(job)
             db.commit()
             logger.info("Job deleted successfully")
-            return {"message": "Job deleted"}
+            return {"detail": "Job deleted"}
     except Exception as e:
         db.rollback()
 
@@ -280,7 +299,7 @@ async def schedule_job(job_id: int):
 
             logger.info("Job scheduled successfully")
 
-            return {"message": "Job has been scheduled successfully"}
+            return {"detail": "Job has been scheduled successfully"}
     except Exception as e:
         db.rollback()
 
@@ -329,17 +348,77 @@ async def stop_job(job_id: int):
             status_code=500, detail=constants.GENERIC_ERROR_MESSAGE)
 
 
-@router.post("/event-notification/{event_id}")
-async def handle_event_notification(event_id: str):
+@router.post("/update-schedule-job/{job_id}")
+async def update_schedule_job(job_id: int):
+    """
+    Update a schedule a job.
 
+    Args:
+        job_id (int): The ID of the job to schedule.
+
+    Returns:
+        dict: A message indicating the scheduled job has been updated.
+
+    Raises:
+        HTTPException: If the job could not be found or already stopped.
+    """
+    try:
+        logger.info(f"Update Scheduling job with ID: {job_id}")
+
+        with get_database_connection() as db:
+            job = db.query(Job).filter(Job.id == job_id).first()
+            if not job:
+                raise HTTPException(
+                    status_code=404, detail=constants.JOB_NOT_FOUND)
+
+            if job.status != 'Completed':
+                raise HTTPException(
+                    status_code=404, detail="Completed job can't be updated")
+
+            job_helper.update_job_schedule(job, db)
+
+            logger.info("Scheduled Job has been successfully updated")
+
+            return {"detail": "Scheduled Job has been successfully updated"}
+    except HTTPException as e:
+        db.rollback()
+
+        logger.exception(
+            "Failed to update a job: %s", str(e))
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
+    except Exception as e:
+        db.rollback()
+
+        logger.exception(
+            f"An error occurred while updating the scheduled the job: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=constants.GENERIC_ERROR_MESSAGE)
+
+
+@router.post("/event-notification/{event_name}")
+async def handle_event_notification(event_name: str):
     with get_database_connection() as db:
         # Retrieve the job associated with the event_id
-        job = db.query(Job).filter(Job.event_id == event_id).first()
+        event_mapping = db.query(EventMapping).filter(
+            EventMapping.name == event_name).first()
+
+        if not event_mapping:
+            raise HTTPException(
+                status_code=404, detail="Event hasn't record in our system")
+
+        result_event_mapping = event_mapping.to_json()
+
+        # Retrieve the job associated with the event_id
+        job = db.query(Job).filter(
+            Job.event_mapping_id == result_event_mapping['id']).first()
+
         if not job:
             raise HTTPException(
-                status_code=404, detail=constants.JOB_NOT_FOUND)
+                status_code=404, detail="No job has been associated by this event")
+
+        result_job = job.to_json()
 
         # Execute the job
-        execute_job.delay(job.id)
+        execute_job(result_job['id'])
 
-        return {"message": "Event notification received and job scheduled"}
+        return {"detail": "Event notification received and job scheduled"}

@@ -119,4 +119,4 @@ async def delete_job_type(job_type_id: int):
                 status_code=404, detail="Job Type not found")
         db.delete(job_type)
         db.commit()
-        return {"message": "Job Type deleted"}
+        return {"detail": "Job Type deleted"}
