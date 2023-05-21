@@ -24,7 +24,7 @@ The Job Executor Application is a powerful tool that allows you to manage and ex
 
 ## Database Diagram
 
-![Database Diagram]()
+![Job Excutor Application](https://github.com/anshitmishraa/Job-Executors/assets/54078251/e2a520de-1a55-4e42-8ea5-361ed85bea15)
 
 ## API Documentation
 
