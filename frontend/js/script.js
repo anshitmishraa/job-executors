@@ -27,7 +27,7 @@ jobTypeSelect.addEventListener("change", function () {
     jobScript.style.display = "block";
   } else {
     jobExecutionNameElement.style.display = "block";
-    jobScript.style.display = "none";
+    jobScript.style.display = "block";
   }
 });
 
@@ -71,17 +71,25 @@ document.addEventListener("DOMContentLoaded", function () {
     const job_type_id = document.getElementById("jobExecutionName").value;
     const execution_type_id = document.getElementById("executionType").value;
     const event_mapping_id = document.getElementById("eventMapping").value;
-    const execution_time = document.getElementById("executionTime").value;
+    const execution_time = convertCurrentTimeToUTC(
+      document.getElementById("executionTime").value
+    );
     const recurring = document.getElementById("recurring").checked;
     const priority = document.getElementById("priority").value;
     const job_type_value = document.getElementById("jobType").value;
     const script = document.getElementById("jobScript").value;
 
-    const job = {
+    const event_based_job = {
+      name,
+      job_type_id,
+      event_mapping_id,
+      priority,
+    };
+
+    const time_based_job = {
       name,
       job_type_id,
       execution_type_id,
-      event_mapping_id,
       execution_time,
       recurring,
       priority,
