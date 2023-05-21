@@ -61,7 +61,7 @@ async def create_job(job: JobCreate):
         with get_database_connection() as db:
             logger.info("Request received to create a job: %s", str(job))
 
-            current_time = datetime.now()
+            current_time = datetime.now(datetime.timezone.utc)
             execution_time = job.execution_time
 
             if job.event_mapping_id == None:

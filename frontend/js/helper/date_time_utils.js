@@ -1,5 +1,5 @@
-export const convertCurrentTimeUTCToIST = (time) => {
-  const newTime = new Date(time).getTime() + 5 * 60 * 60;
+export const convertCurrentTimeToUTC = (time) => {
+  const newTime = new Date(time).getTime() - 5 * 60 * 60;
   return new Date(newTime).toISOString();
 };
 
