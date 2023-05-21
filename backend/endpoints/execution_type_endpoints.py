@@ -115,4 +115,4 @@ async def delete_execution_type(execution_type_id: int):
                 status_code=404, detail="Execution Type not found")
         db.delete(execution_type)
         db.commit()
-        return {"message": "Execution Type deleted"}
+        return {"detail": "Execution Type deleted"}

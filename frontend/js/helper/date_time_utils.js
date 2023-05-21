@@ -1,5 +1,5 @@
-export const convertCurrentTimeToUTC = (time) => {
-  const newTime = new Date(time).getTime() - 5 * 60 * 60;
+export const convertCurrentTimeUTCToIST = (time) => {
+  const newTime = new Date(time).getTime() + 5 * 60 * 60;
   return new Date(newTime).toISOString();
 };
 
@@ -14,17 +14,15 @@ export const getCurrentDateTime = function () {
 };
 
 export function parseDateTime(timeString) {
-  const dateTime = new Date(timeString);
-
-  const options = {
-    year: "numeric",
+  const date = new Date(timeString);
+  const istDate = date.toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
     month: "long",
     day: "numeric",
+    year: "numeric",
     hour: "numeric",
     minute: "numeric",
     second: "numeric",
-  };
-  const formattedTime = dateTime.toLocaleString(undefined, options); // Example output: "May 16, 2023, 5:41:12 PM"
-
-  return formattedTime;
+  });
+  return istDate;
 }

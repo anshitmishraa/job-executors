@@ -6,6 +6,8 @@ from backend.config.db import get_database_connection
 from backend.models.job import Job
 from backend.models.job import JobType
 from backend.script import run_script as script
+from backend.tasks import event_listener
+from backend.models.job import EventMapping
 
 load_dotenv()
 
@@ -75,14 +77,23 @@ def execute_job(job_id):
                 # Handle event-based execution
             elif result_job_type['name'] == "EVENT_BASED":
                 # Listen for the specific event
-                # Example code: (Please note this is a placeholder and you need to replace it with your actual event handling logic)
-                event_occurred = listen_for_event(result_job['event_name'])
-                if event_occurred:
+                event_mapping = db.query(EventMapping).filter(
+                    EventMapping.id == result_job['event_mapping_id']).first()
+                if not event_mapping:
+                    raise Exception("Event mapping not found")
+
+                result_event_mapping = event_mapping.to_json()
+
+                logger.info("Executing event job: %s",
+                            result_event_mapping['name'])
+
+                if result_event_mapping['name'] == 'TRAIN_TICKET_CONFIRMATION':
                     # Perform the job-specific logic here when the event occurs
-                    # ...
+                    log.info(
+                        "Train ticket has been sent to the customer over mail")
 
                     # You can also update the job status during the execution if needed
-                    job.status = "Running"
+                    job.status = "Completed"
                     db.commit()
                 else:
                     # Handle the case when the event doesn't occur or handle the event not found scenario

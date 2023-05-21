@@ -3,6 +3,7 @@ import * as retry_job_api from "../api/retry_job.js";
 import * as stop_job_api from "../api/stop_job.js";
 import * as constant from "../helper/constant.js";
 import * as date_time_utils from "../helper/date_time_utils.js";
+import * as update_job from "../helper/update_job.js";
 
 // Fetch the job list from the backend
 export async function createTablesForStatuses() {
@@ -56,6 +57,15 @@ export async function createTablesForStatuses() {
             jobTimeHeader.textContent = "Schedule Time";
           }
 
+          const priorityHeader = document.createElement("th");
+          priorityHeader.className = "py-2 px-4 border-b bg-gray-100 text-left";
+          priorityHeader.textContent = "Priority";
+
+          const recurringHeader = document.createElement("th");
+          recurringHeader.className =
+            "py-2 px-4 border-b bg-gray-100 text-left";
+          recurringHeader.textContent = "Recurring";
+
           const statusHeader = document.createElement("th");
           statusHeader.className = "py-2 px-4 border-b bg-gray-100 text-center";
           statusHeader.textContent = "Status";
@@ -72,8 +82,13 @@ export async function createTablesForStatuses() {
           ) {
             headerRow.appendChild(jobTimeHeader);
           }
+          headerRow.appendChild(recurringHeader);
+          if (status == "Scheduled") {
+            headerRow.appendChild(priorityHeader);
+          }
           headerRow.appendChild(statusHeader);
           if (status != "Completed") headerRow.appendChild(actionsHeader);
+
           thead.appendChild(headerRow);
           table.appendChild(thead);
 
@@ -93,14 +108,41 @@ export async function createTablesForStatuses() {
             const jobTime = document.createElement("td");
             jobTime.className = "py-2 px-4 border-b text-left";
 
+            const jobPriority = document.createElement("td");
+            jobPriority.className = "py-2 px-4 border-b text-left";
+
+            const priorityTag = document.createElement("span");
+            priorityTag.className =
+              "inline-block bg-blue-500 text-white text-xs font-semibold px-2 rounded";
+
+            const jobRecurring = document.createElement("td");
+            jobRecurring.className = "py-2 px-4 border-b text-left";
+
+            const recurringIndicator = document.createElement("span");
+            recurringIndicator.className =
+              "inline-block w-4 h-4 rounded-full mr-2";
+            if (job.event_mapping_id != null) {
+              recurringIndicator.textContent = "---";
+            } else {
+              recurringIndicator.classList.add(
+                job.recurring ? "bg-green-500" : "bg-red-500"
+              );
+            }
+
             if (status === "Failed" || status === "Completed") {
               jobTime.textContent = date_time_utils.parseDateTime(
                 job.updated_at
               );
             } else if (status === "Scheduled") {
-              jobTime.textContent = date_time_utils.parseDateTime(
-                job.execution_time
-              );
+              priorityTag.textContent = job.priority;
+
+              if (job.event_mapping_id == null) {
+                jobTime.textContent = date_time_utils.parseDateTime(
+                  job.execution_time
+                );
+              } else {
+                jobTime.textContent = "---";
+              }
             }
 
             const jobStatus = document.createElement("td");
@@ -126,6 +168,9 @@ export async function createTablesForStatuses() {
             editButton.className =
               "editButton bg-blue-500 text-white py-1 px-2 rounded mr-4";
             editButton.textContent = "Edit";
+            editButton.onclick = function () {
+              update_job.showEditForm(job);
+            };
 
             const actionsColumn = document.createElement("td");
             actionsColumn.className = "py-2 px-4 border-b text-right";
@@ -147,6 +192,12 @@ export async function createTablesForStatuses() {
               status === "Scheduled"
             ) {
               listItem.appendChild(jobTime);
+              jobRecurring.appendChild(recurringIndicator);
+              listItem.appendChild(jobRecurring);
+            }
+            if (status == "Scheduled") {
+              jobPriority.appendChild(priorityTag);
+              listItem.appendChild(jobPriority);
             }
             listItem.appendChild(jobStatus);
             if (status != "Completed") listItem.appendChild(actionsColumn);

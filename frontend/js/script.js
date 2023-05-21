@@ -18,6 +18,8 @@ const jobExecutionNameElement = document.getElementById("job-execution-name");
 const jobScript = document.getElementById("job-script");
 const executionTimeInput = document.getElementById("executionTime");
 
+const jobRecurringElement = document.getElementById("job-recurring");
+
 jobTypeSelect.addEventListener("change", function () {
   const value = this.value;
   if (value != "Code") {
@@ -38,11 +40,13 @@ executionTypeSelect.addEventListener("change", function () {
     jobExecutionNameElement.style.display = "none";
     executionTimeElement.style.display = "none";
     jobScript.style.display = "none";
+    jobRecurringElement.style.display = "none";
   } else {
     eventMapping.style.display = "none";
     jobTypeElement.style.display = "block";
     jobExecutionNameElement.style.display = "block";
     executionTimeElement.style.display = "block";
+    jobRecurringElement.style.display = "block";
   }
 });
 
@@ -67,9 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const job_type_id = document.getElementById("jobExecutionName").value;
     const execution_type_id = document.getElementById("executionType").value;
     const event_mapping_id = document.getElementById("eventMapping").value;
-    const execution_time = date_time_utils.convertCurrentTimeToUTC(
-      document.getElementById("executionTime").value
-    );
+    const execution_time = document.getElementById("executionTime").value;
     const recurring = document.getElementById("recurring").checked;
     const priority = document.getElementById("priority").value;
     const job_type_value = document.getElementById("jobType").value;
