@@ -32,10 +32,18 @@ async def home(request: Request):
     context = {"request": request}
     return templates.TemplateResponse("index.html", context=context)
 
+
+@app.get("/health")
+def check_health():
+    return {"status": "OK"}
+
+
 # Include the API routes from api/main.py
 app.include_router(job_router, prefix="/jobs", tags=["jobs"])
-app.include_router(execution_type_router,
-                   prefix="/execution_types", tags=["execution_types"])
-app.include_router(event_mapping_router,
-                   prefix="/event_mappings", tags=["event_mappings"])
+app.include_router(
+    execution_type_router, prefix="/execution_types", tags=["execution_types"]
+)
+app.include_router(
+    event_mapping_router, prefix="/event_mappings", tags=["event_mappings"]
+)
 app.include_router(job_type_router, prefix="/job_types", tags=["job_types"])
