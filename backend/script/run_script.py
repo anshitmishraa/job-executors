@@ -36,12 +36,22 @@ def run_script(result_job_type: JobType):
 
     try:
         # Execute the shell script
-        subprocess.run(['bash', 'script.sh'], check=True, shell=True)
-    except subprocess.CalledProcessError as e:
-        # Handle any errors that occur during script execution
-        logger.error("Error occurred while executing the script file:", str(e))
-        return False
+        os.system("bash " + script_path)
+
+        return True
     except Exception as e:
-        # Handle any other exceptions that may occur
+        # Handle any exceptions that may occur
         logger.error("Error occurred:", str(e))
         return False
+
+    # try:
+    #     # Execute the shell script
+    #     subprocess.run(['bash', script_path], check=True, shell=True)
+    # except subprocess.CalledProcessError as e:
+    #     # Handle any errors that occur during script execution
+    #     logger.error("Error occurred while executing the script file:", str(e))
+    #     return False
+    # except Exception as e:
+    #     # Handle any other exceptions that may occur
+    #     logger.error("Error occurred:", str(e))
+    #     return False

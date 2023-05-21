@@ -11,7 +11,8 @@ load_dotenv()
 
 SQLALCHEMY_DATABASE_URL = os.getenv("SQLALCHEMY_DATABASE_URL")
 # Create all tables defined in the metadata if they don't exist
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+engine = create_engine(
+    "postgresql://postgres:nndvhGgsQwW9PRxdcbzN@containers-us-west-197.railway.app:6679/railway")
 
 
 # Create all tables defined in the metadata if they don't exist
