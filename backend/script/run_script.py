@@ -1,5 +1,6 @@
 import os
 import subprocess
+import sh
 
 from backend.models.job import JobType
 from backend.helper import log
@@ -35,14 +36,23 @@ def run_script(result_job_type: JobType):
     os.chmod(script_path, 0o755)
 
     try:
-        # Execute the shell script
-        os.system("bash " + script_path)
-
+        # Execute the Bash script
+        sh.bash(script_path)
         return True
     except Exception as e:
-        # Handle any exceptions that may occur
-        logger.error("Error occurred:", str(e))
+        # Handle any exceptions or errors
+        log.error("Error occurred:", str(e))
         return False
+
+    # try:
+    #     # Execute the shell script
+    #     os.system("bash " + script_path)
+
+    #     return True
+    # except Exception as e:
+    #     # Handle any exceptions that may occur
+    #     logger.error("Error occurred:", str(e))
+    #     return False
 
     # try:
     #     # Execute the shell script
