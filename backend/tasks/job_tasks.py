@@ -35,8 +35,8 @@ def execute_job(job_id):
             )
 
             event_mapping = (
-                db.query(JobType)
-                .filter(JobType.id == result_job["event_mapping_id"])
+                db.query(EventMapping)
+                .filter(EventMapping.id == result_job["event_mapping_id"])
                 .first()
             )
 
@@ -45,7 +45,6 @@ def execute_job(job_id):
                     "Job Type or Event Mapping not found for job %s", result_job
                 )
 
-            logger.info("Executing job: %s", result_job["name"])
             logger.info("Job details: %s", str(result_job))
 
             if job_type:
@@ -89,10 +88,9 @@ def execute_job(job_id):
                 # Handle event-based execution
 
                 result_event_mapping = event_mapping.to_json()
-
-                logger.info("Executing event job: %s", result_event_mapping["name"])
-
                 if result_event_mapping["name"] == "TRAIN_TICKET_CONFIRMATION":
+                    logger.info("Executing event job: %s", result_event_mapping["name"])
+
                     # Perform the job-specific logic here when the event occurs
                     log.info("Train ticket has been sent to the customer over mail")
 
