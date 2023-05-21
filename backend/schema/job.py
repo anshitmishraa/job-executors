@@ -49,6 +49,7 @@ class JobUpdate(JobBase):
         status (str): The status of the job.
     """
 
+    id: int
     job_scheduler_id: str
     status: str
     pass
