@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
       script,
     };
 
-    if (job_type_value == "SCRIPT") {
+    if (job_type_value == "SCRIPT" && executionType == 1) {
       create_job_type_api.createJobType(job_type, time_based_job);
     } else {
       if (execution_type_id == 2) {

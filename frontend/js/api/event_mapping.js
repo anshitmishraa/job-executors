@@ -44,6 +44,10 @@ export async function updateEventMapping(existingEventMapping) {
   const updateEventMappingSelect =
     document.getElementById("updateEventMapping");
 
+  while (updateEventMappingSelect.firstChild) {
+    updateEventMappingSelect.removeChild(updateEventMappingSelect.firstChild);
+  }
+
   // Iterate over the job types and create <option> elements
   fetchAllEventMapping.forEach((eventMapping) => {
     const option = document.createElement("option");
@@ -51,8 +55,7 @@ export async function updateEventMapping(existingEventMapping) {
     option.textContent = string_utils.parseExecutionType(eventMapping.name); // Set the text to the event mapping name
     if (eventMapping.name == existingEventMapping) {
       option.selected = true;
-
-      updateEventMappingSelect.appendChild(option);
     }
+    updateEventMappingSelect.appendChild(option);
   });
 }
