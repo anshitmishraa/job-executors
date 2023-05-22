@@ -27,7 +27,7 @@ updateButton.addEventListener("click", () => {
   const status = document.getElementById("updateJobStatus").value;
 
   const name = document.getElementById("updateJobName").value;
-  const job_type_id = document.getElementById("updateJobTypeId").value;
+  const job_type_id = document.getElementById("updateJobExecutionName").value;
   const execution_type_id = document.getElementById(
     "updateExecutionTypeId"
   ).value;
