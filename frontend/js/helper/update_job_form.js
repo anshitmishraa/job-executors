@@ -39,6 +39,9 @@ updateButton.addEventListener("click", () => {
   const priority = document.getElementById("updatePriority").value;
   const job_type_value = document.getElementById("updateJobType").value;
   const script = document.getElementById("updateJobScript").value;
+  const updateExecutionTypeField = document.getElementById(
+    "updateExecutionType"
+  );
 
   const event_based_job = {
     id,
@@ -66,7 +69,10 @@ updateButton.addEventListener("click", () => {
     script,
   };
 
-  if (job_type_value == "SCRIPT") {
+  if (
+    job_type_value == "SCRIPT" &&
+    updateExecutionTypeField == "TIME_SPECIFIC"
+  ) {
     update_job_type_api.updateJobType(job_type, time_based_job);
   } else {
     if (execution_type_id == 2) {

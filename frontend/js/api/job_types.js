@@ -59,6 +59,12 @@ export async function updateJobTypes(existingjobType) {
     "updateJobExecutionName"
   );
 
+  while (updateJobExecutionNameSelect.firstChild) {
+    updateJobExecutionNameSelect.removeChild(
+      updateJobExecutionNameSelect.firstChild
+    );
+  }
+
   // Iterate over the job types and create <option> elements
   fetchAllJobTypes.forEach((jobType) => {
     if (jobType.job_type == "CODE") {
