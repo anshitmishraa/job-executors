@@ -109,7 +109,7 @@ def execute_job(job_id):
                     # Perform the job-specific logic here when the event occurs
                     logger.info("Train ticket has been sent to the customer over mail")
 
-                    # Update the job status during the execution if needed
+                    # Update the job status
                     job.status = "Completed"
                     db.commit()
                 elif result_event_mapping["name"] == "FLIGHT_TICKET_CONFIRMATION":
@@ -118,7 +118,7 @@ def execute_job(job_id):
                     # Perform the job-specific logic here when the event occurs
                     logger.info("Flight ticket has been sent to the customer over mail")
 
-                    # Update the job status during the execution if needed
+                    # Update the job status
                     job.status = "Completed"
                     db.commit()
                 else:
