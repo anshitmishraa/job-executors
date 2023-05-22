@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from datetime import datetime, timezone
+from datetime import datetime
 from sqlalchemy import distinct
+from typing import Optional
 
 from backend.config.db import get_database_connection
 from backend.schema.job import JobCreate, JobUpdate
@@ -201,19 +202,25 @@ async def get_job(job_id: int):
 
 
 @router.get("/")
-async def get_jobs():
+async def get_jobs(status: Optional[str] = None):
     """
-    Get all jobs.
+    Get jobs based on status (optional).
+
+    Args:
+        status (str, optional): Filter jobs by status. Defaults to None.
 
     Returns:
         list: List of jobs.
     """
 
     try:
-        logger.info("Fetching all jobs")
+        logger.info("Fetching jobs")
 
         with get_database_connection() as db:
-            jobs = db.query(Job).all()
+            if status is not None:
+                jobs = db.query(Job).filter_by(status=status).all()
+            else:
+                jobs = db.query(Job).all()
 
             logger.info("Jobs fetched successfully")
 
