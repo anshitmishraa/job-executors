@@ -41,7 +41,7 @@ updateButton.addEventListener("click", () => {
   const script = document.getElementById("updateJobScript").value;
   const updateExecutionTypeField = document.getElementById(
     "updateExecutionType"
-  );
+  ).value;
 
   const event_based_job = {
     id,
