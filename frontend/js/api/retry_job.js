@@ -2,7 +2,7 @@ import * as message from "../helper/message.js";
 import * as create_job_status_table from "../helper/create_job_status_table.js";
 
 export function retryJob(job_id) {
-  // Send a request to cancel the job
+  // Send a request to retry the job
   fetch(`/jobs/schedule-job/${job_id}`, { method: "POST" })
     .then((response) => {
       if (response.ok) {
