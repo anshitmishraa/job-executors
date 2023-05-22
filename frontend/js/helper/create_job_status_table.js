@@ -226,9 +226,11 @@ export async function createTablesForStatuses() {
               status === "Scheduled"
             ) {
               listItem.appendChild(jobTime);
-              jobRecurring.appendChild(recurringIndicator);
-              listItem.appendChild(jobRecurring);
             }
+
+            jobRecurring.appendChild(recurringIndicator);
+            listItem.appendChild(jobRecurring);
+
             if (status == "Scheduled") {
               jobPriority.appendChild(priorityTag);
               listItem.appendChild(jobPriority);
