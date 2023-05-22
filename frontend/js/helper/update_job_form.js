@@ -49,6 +49,7 @@ updateButton.addEventListener("click", () => {
     execution_type_id,
     event_mapping_id,
     priority,
+    status,
   };
 
   const time_based_job = {

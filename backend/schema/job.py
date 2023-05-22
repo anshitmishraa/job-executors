@@ -15,6 +15,7 @@ class JobBase(BaseModel):
         priority (int): The priority of the job.
         event_mapping_id (int): The ID of the event mapping associated with the job.
         job_type_id (int): The ID of the job type associated with the job.
+        job_scheduler_id (str): The ID of the job scheduler associated with the job.
     """
 
     name: str
@@ -24,6 +25,7 @@ class JobBase(BaseModel):
     priority: int
     event_mapping_id: Optional[int] = None
     job_type_id: Optional[int] = None
+    job_scheduler_id: Optional[str] = None
 
 
 class JobCreate(JobBase):
@@ -45,12 +47,11 @@ class JobUpdate(JobBase):
         JobBase: Base model for jobs.
 
     Attributes:
-        job_scheduler_id (str): The ID of the job scheduler associated with the job.
+        id (int): The ID of the job.
         status (str): The status of the job.
     """
 
     id: int
-    job_scheduler_id: str
     status: str
     pass
 
