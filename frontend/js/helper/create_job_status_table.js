@@ -5,6 +5,7 @@ import * as constant from "../helper/constant.js";
 import * as date_time_utils from "../helper/date_time_utils.js";
 import * as update_job_form from "./update_job_form.js";
 import * as execution_type_api from "../api/execution_types.js";
+import { showError } from "./message.js";
 
 // Fetch the job list from the backend
 export async function createTablesForStatuses() {
@@ -26,11 +27,47 @@ export async function createTablesForStatuses() {
     emptyJobsContainer.append(emptyJobsElement);
     tablesContainer.append(emptyJobsContainer);
   } else {
-    fetch("/jobs")
-      .then((response) => response.json())
-      .then((data) => {
-        // Create a table for each status
-        statuses.forEach((status) => {
+    // Create a shimmer effect for the loading state
+    const shimmerTable = document.createElement("table");
+    shimmerTable.className =
+      "mt-4 w-full bg-white border border-gray-300 rounded animate-pulse";
+
+    const shimmerTbody = document.createElement("tbody");
+    shimmerTbody.className = "divide-y divide-gray-600";
+
+    // Create a shimmer row
+    const shimmerRow = document.createElement("tr");
+    shimmerRow.className = "bg-gray-400 animate-pulse";
+
+    const shimmerColumn = document.createElement("td");
+    shimmerColumn.className = "py-32 px-32 border-b";
+    shimmerRow.appendChild(shimmerColumn);
+
+    // Add the shimmer row to the shimmer table body
+    shimmerTbody.appendChild(shimmerRow);
+
+    // Add the shimmer table body to the shimmer table
+    shimmerTable.appendChild(shimmerTbody);
+
+    // Add the shimmer table to the tables container
+    tablesContainer.appendChild(shimmerTable);
+
+    const executionTypes = await execution_type_api.executionTypes();
+
+    // Fetch data for each status in parallel
+    const fetchPromises = statuses.map((status) =>
+      fetch(`/jobs?status=${status}`).then((response) => response.json())
+    );
+
+    Promise.all(fetchPromises)
+      .then((dataList) => {
+        // Remove the shimmer table once the actual data is fetched
+        shimmerTable.remove();
+
+        // Create a table for each status using the fetched job data
+        dataList.forEach((data, index) => {
+          const status = statuses[index];
+
           const subTableHeading = document.createElement("h4");
           subTableHeading.className = "text-2xl font-semibold py-4 text-center";
           subTableHeading.textContent = status + " - Job List";
@@ -116,9 +153,9 @@ export async function createTablesForStatuses() {
             const jobExecutionType = document.createElement("td");
             jobExecutionType.className = "py-2 px-4 border-b text-left";
 
-            const executionType = await execution_type_api.executionTypefromId(
-              job.execution_type_id
-            );
+            const executionType = executionTypes.filter(
+              (executionType) => executionType.id === job.execution_type_id
+            )[0];
 
             if (executionType.name == "TIME_SPECIFIC") {
               const timeSpecificJobExecutionType =
@@ -245,6 +282,10 @@ export async function createTablesForStatuses() {
           tablesContainer.appendChild(subTableHeading);
           tablesContainer.appendChild(table);
         });
+      })
+      .catch((error) => {
+        showError(error);
+        shimmerTable.remove();
       });
   }
 }
