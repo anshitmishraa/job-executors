@@ -7,14 +7,6 @@ import * as create_job_api from "./api/create_job.js";
 
 import * as create_job_status_table from "./helper/create_job_status_table.js";
 
-window.onload = function () {
-  setTimeout(() => {
-    console.log("in");
-    const spinnerContainer = document.getElementById("spinner-container");
-    spinnerContainer.style.display = "none";
-  }, 4000);
-};
-
 const jobTypeSelect = document.getElementById("jobType");
 const executionTypeSelect = document.getElementById("executionType");
 

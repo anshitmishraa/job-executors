@@ -16,11 +16,6 @@
     />
   </head>
   <body class="bg-gray-100">
-    <!-- Spinner -->
-
-    <div id="spinner-container">
-      <div class="spinner"></div>
-    </div>
 
     <!-- Success message -->
     <div
@@ -34,270 +29,174 @@
       <span class="close-button text-2xl font-bold leading-none absolute right-2 top-4 cursor-pointer">&times;</span>
     </div>
 
-    <h1 class="text-3xl font-bold text-center mt-8">Job Management</h1>
-
-    <!-- Job Creation Form -->
-    <div class="mx-8">
-      <h2 class="text-2xl font-bold mt-8">Create Job</h2>
-      <form id="jobCreationForm" class="mt-4 px-8 py-4 bg-white shadow rounded">
-        <div class="mb-4">
-          <label for="jobName" class="font-semibold">Job Name:</label>
-          <input
-            type="text"
-            id="jobName"
-            required
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-          />
-        </div>
-
-        <div class="mb-4" id="execution-type">
-          <label for="executionType" class="font-semibold"
-            >Execution Type:</label
-          >
-          <select
-            id="executionType"
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-          >
-            <!-- JavaScript code will dynamically populate the options here -->
-          </select>
-        </div>
-
-        <div class="mb-4" id="job-type" style="display: block">
-          <label for="jobType" class="font-semibold">Job Type:</label>
-          <select
-            id="jobType"
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-          >
-            <!-- JavaScript code will dynamically populate the options here -->
-          </select>
-        </div>
-
-        <div class="mb-4" id="job-execution-name" style="display: block">
-          <label for="jobExecutionName" class="font-semibold"
-            >Job Execution Name:</label
-          >
-          <select
-            id="jobExecutionName"
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-          >
-            <!-- JavaScript code will dynamically populate the options here -->
-          </select>
-        </div>
-
-        <div class="mb-4" id="job-script" style="display: none">
-          <label for="jobScript" class="font-semibold">Script:</label>
-          <textarea
-            id="jobScript"
-            rows="5"
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-          ></textarea>
-        </div>
-
-        <div class="mb-4" id="job-execution-time">
-          <label for="executionTime" class="font-semibold"
-            >Execution Time:</label
-          >
-          <input
-            type="datetime-local"
-            id="executionTime"
-            required
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-            min=""
-            value=""
-          />
-        </div>
-
-        <div class="mb-4" id="job-recurring">
-          <label for="recurring" class="font-semibold">Recurring:</label>
-          <input
-            type="checkbox"
-            id="recurring"
-            class="border border-gray-300 px-3 py-2 rounded"
-          />
-        </div>
-
-        <div class="mb-4" id="event-mapping" style="display: none">
-          <label for="eventMapping" class="font-semibold">Event Mapping:</label>
-          <select
-            id="eventMapping"
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-          >
-            <!-- JavaScript code will dynamically populate the options here -->
-          </select>
-        </div>
-
-        <div class="mb-4">
-          <label for="priority" class="font-semibold">Priority:</label>
-          <input
-            type="number"
-            id="priority"
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-          />
-        </div>
-
-        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">
-          Create
-        </button>
-      </form>
-    </div>
-
-    <!-- Update Job Form Popup -->
-    <div
-      id="editFormPopup"
-      class="hidden fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-500 bg-opacity-50"
-    >
-      <div class="bg-white px-8 py-4 rounded shadow max-h-screen overflow-y-auto mt-16 mt-8 w-1/2">
-        <h2 class="text-2xl font-bold mt-4 mb-4">Update Job</h2>
-
-        <!-- Update Job fields... -->
-        <div class="mb-4 hidden" id="update-job-id">
-          <label for="updateJobId" class="font-semibold">Job Id:</label>
-          <input type="text" id="updateJobId" required class="border border-gray-300 px-3 py-2 rounded w-full" />
-        </div>
-
-        <div class="mb-4 hidden" id="update-job-scheduler-id">
-          <label for="updateJobSchedulerId" class="font-semibold">Job Scheduler Id:</label>
-          <input type="text" id="updateJobSchedulerId" required class="border border-gray-300 px-3 py-2 rounded w-full" />
-        </div>
-
-        <div class="mb-4 hidden" id="update-job-status">
-          <label for="updateJobStatus" class="font-semibold">Job Status:</label>
-          <input type="text" id="updateJobStatus" required class="border border-gray-300 px-3 py-2 rounded w-full" />
-        </div>
-
-        <div class="mb-4 hidden" id="update-job-type-id">
-          <label for="updateJobTypeId" class="font-semibold">Job Type Id:</label>
-          <input type="text" id="updateJobTypeId" required class="border border-gray-300 px-3 py-2 rounded w-full" />
-        </div>
-
-        <div class="mb-4" id="update-job-name">
-          <label for="updateJobName" class="font-semibold">Job Name:</label>
-          <input
-            type="text"
-            id="updateJobName"
-            required
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-          />
-        </div>
-
-        <div class="mb-4">
-          <label
-            for="updateExecutionType"
-            class="font-semibold"
-            id="update-execution-type"
-            >Execution Type:</label
-          >
-          <input
-            disabled
-            type="text"
-            id="updateExecutionType"
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-          />
-          <!-- JavaScript code will dynamically populate the options here -->
-        </div>
-
-        <div class=" hidden mb-4">
-          <label for="updateExecutionTypeId" class=" font-semibold" id="update-execution-type-id">Execution Id:</label>
-          <input disabled type="text" id="updateExecutionTypeId" class="border border-gray-300 px-3 py-2 rounded w-full" />
-          <!-- JavaScript code will dynamically populate the options here -->
-        </div>
-
-        <div class="mb-4" id="update-job-type" style="display: none">
-          <label for="updateJobType" class="font-semibold">Job Type:</label>
-          <input
-            id="updateJobType"
-            disabled
-            type="text"
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-          />
-            <!-- JavaScript code will dynamically populate the options here -->
-        </div>
-
-        <div class="mb-4" id="update-job-execution-name" style="display: block">
-          <label for="updateJobExecutionName" class="font-semibold"
-            >Job Execution Name:</label
-          >
-          <select
-            id="updateJobExecutionName"
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-          >
-            <!-- JavaScript code will dynamically populate the options here -->
-          </select>
-        </div>
-
-        <div class="mb-4" id="update-job-script" style="display: none">
-          <label for="updateJobScript" class="font-semibold">Script:</label>
-          <textarea
-            id="updateJobScript"
-            rows="5"
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-          ></textarea>
-        </div>
-
-        <div class="mb-4" id="update-job-execution-time">
-          <label for="updateExecutionTime" class="font-semibold"
-            >Execution Time:</label
-          >
-          <input
-            type="datetime-local"
-            id="updateExecutionTime"
-            required
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-            min=""
-            value=""
-          />
-        </div>
-
-        <div class="mb-4" id="update-job-recurring">
-          <label for="updateRecurring" class="font-semibold">Recurring:</label>
-          <input
-            type="checkbox"
-            id="updateRecurring"
-            class="border border-gray-300 px-3 py-2 rounded"
-          />
-        </div>
-
-        <div class="mb-4" id="update-event-mapping" style="display: none">
-          <label for="updateEventMapping" class="font-semibold">Event Mapping:</label>
-          <select
-            id="updateEventMapping"
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-          >
-            <!-- JavaScript code will dynamically populate the options here -->
-          </select>
-        </div>
-
-        <div class="mb-4">
-          <label for="updatePriority" class="font-semibold">Priority:</label>
-          <input
-            disabled
-            type="number"
-            id="updatePriority"
-            class="border border-gray-300 px-3 py-2 rounded w-full"
-          />
-        </div>
-
-
-        <button
-          id="updateButton"
-          class="bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Update
-        </button>
-        <button
-          id="cancelButton"
-          class="bg-gray-500 text-white py-2 px-4 rounded ml-2"
-        >
-          Cancel
-        </button>
+    <div id="main-body">
+      <h1 class="text-3xl font-bold text-center mt-8">Job Management</h1>
+      
+      <!-- Job Creation Form -->
+      <div class="mx-8">
+        <h2 class="text-2xl font-bold mt-8">Create Job</h2>
+        <form id="jobCreationForm" class="mt-4 px-8 py-4 bg-white shadow rounded">
+          <div class="mb-4">
+            <label for="jobName" class="font-semibold">Job Name:</label>
+            <input type="text" id="jobName" required class="border border-gray-300 px-3 py-2 rounded w-full" />
+          </div>
+      
+          <div class="mb-4" id="execution-type">
+            <label for="executionType" class="font-semibold">Execution Type:</label>
+            <select id="executionType" class="border border-gray-300 px-3 py-2 rounded w-full">
+              <!-- JavaScript code will dynamically populate the options here -->
+            </select>
+          </div>
+      
+          <div class="mb-4" id="job-type" style="display: block">
+            <label for="jobType" class="font-semibold">Job Type:</label>
+            <select id="jobType" class="border border-gray-300 px-3 py-2 rounded w-full">
+              <!-- JavaScript code will dynamically populate the options here -->
+            </select>
+          </div>
+      
+          <div class="mb-4" id="job-execution-name" style="display: block">
+            <label for="jobExecutionName" class="font-semibold">Job Execution Name:</label>
+            <select id="jobExecutionName" class="border border-gray-300 px-3 py-2 rounded w-full">
+              <!-- JavaScript code will dynamically populate the options here -->
+            </select>
+          </div>
+      
+          <div class="mb-4" id="job-script" style="display: none">
+            <label for="jobScript" class="font-semibold">Script:</label>
+            <textarea id="jobScript" rows="5" class="border border-gray-300 px-3 py-2 rounded w-full"></textarea>
+          </div>
+      
+          <div class="mb-4" id="job-execution-time">
+            <label for="executionTime" class="font-semibold">Execution Time:</label>
+            <input type="datetime-local" id="executionTime" required class="border border-gray-300 px-3 py-2 rounded w-full"
+              min="" value="" />
+          </div>
+      
+          <div class="mb-4" id="job-recurring">
+            <label for="recurring" class="font-semibold">Recurring:</label>
+            <input type="checkbox" id="recurring" class="border border-gray-300 px-3 py-2 rounded" />
+          </div>
+      
+          <div class="mb-4" id="event-mapping" style="display: none">
+            <label for="eventMapping" class="font-semibold">Event Mapping:</label>
+            <select id="eventMapping" class="border border-gray-300 px-3 py-2 rounded w-full">
+              <!-- JavaScript code will dynamically populate the options here -->
+            </select>
+          </div>
+      
+          <div class="mb-4">
+            <label for="priority" class="font-semibold">Priority:</label>
+            <input type="number" id="priority" class="border border-gray-300 px-3 py-2 rounded w-full" />
+          </div>
+      
+          <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">
+            Create
+          </button>
+        </form>
       </div>
-    </div>
-
-    <div class="mx-8 my-4">
+      
+      <!-- Update Job Form Popup -->
+      <div id="editFormPopup"
+        class="hidden fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
+        <div class="bg-white px-8 py-4 rounded shadow max-h-screen overflow-y-auto mt-16 mt-8 w-1/2">
+          <h2 class="text-2xl font-bold mt-4 mb-4">Update Job</h2>
+      
+          <!-- Update Job fields... -->
+          <div class="mb-4 hidden" id="update-job-id">
+            <label for="updateJobId" class="font-semibold">Job Id:</label>
+            <input type="text" id="updateJobId" required class="border border-gray-300 px-3 py-2 rounded w-full" />
+          </div>
+      
+          <div class="mb-4 hidden" id="update-job-scheduler-id">
+            <label for="updateJobSchedulerId" class="font-semibold">Job Scheduler Id:</label>
+            <input type="text" id="updateJobSchedulerId" required class="border border-gray-300 px-3 py-2 rounded w-full" />
+          </div>
+      
+          <div class="mb-4 hidden" id="update-job-status">
+            <label for="updateJobStatus" class="font-semibold">Job Status:</label>
+            <input type="text" id="updateJobStatus" required class="border border-gray-300 px-3 py-2 rounded w-full" />
+          </div>
+      
+          <div class="mb-4 hidden" id="update-job-type-id">
+            <label for="updateJobTypeId" class="font-semibold">Job Type Id:</label>
+            <input type="text" id="updateJobTypeId" required class="border border-gray-300 px-3 py-2 rounded w-full" />
+          </div>
+      
+          <div class="mb-4" id="update-job-name">
+            <label for="updateJobName" class="font-semibold">Job Name:</label>
+            <input type="text" id="updateJobName" required class="border border-gray-300 px-3 py-2 rounded w-full" />
+          </div>
+      
+          <div class="mb-4">
+            <label for="updateExecutionType" class="font-semibold" id="update-execution-type">Execution Type:</label>
+            <input disabled type="text" id="updateExecutionType" class="border border-gray-300 px-3 py-2 rounded w-full" />
+            <!-- JavaScript code will dynamically populate the options here -->
+          </div>
+      
+          <div class=" hidden mb-4">
+            <label for="updateExecutionTypeId" class=" font-semibold" id="update-execution-type-id">Execution Id:</label>
+            <input disabled type="text" id="updateExecutionTypeId" class="border border-gray-300 px-3 py-2 rounded w-full" />
+            <!-- JavaScript code will dynamically populate the options here -->
+          </div>
+      
+          <div class="mb-4" id="update-job-type" style="display: none">
+            <label for="updateJobType" class="font-semibold">Job Type:</label>
+            <input id="updateJobType" disabled type="text" class="border border-gray-300 px-3 py-2 rounded w-full" />
+            <!-- JavaScript code will dynamically populate the options here -->
+          </div>
+      
+          <div class="mb-4" id="update-job-execution-name" style="display: block">
+            <label for="updateJobExecutionName" class="font-semibold">Job Execution Name:</label>
+            <select id="updateJobExecutionName" class="border border-gray-300 px-3 py-2 rounded w-full">
+              <!-- JavaScript code will dynamically populate the options here -->
+            </select>
+          </div>
+      
+          <div class="mb-4" id="update-job-script" style="display: none">
+            <label for="updateJobScript" class="font-semibold">Script:</label>
+            <textarea id="updateJobScript" rows="5" class="border border-gray-300 px-3 py-2 rounded w-full"></textarea>
+          </div>
+      
+          <div class="mb-4" id="update-job-execution-time">
+            <label for="updateExecutionTime" class="font-semibold">Execution Time:</label>
+            <input type="datetime-local" id="updateExecutionTime" required
+              class="border border-gray-300 px-3 py-2 rounded w-full" min="" value="" />
+          </div>
+      
+          <div class="mb-4" id="update-job-recurring">
+            <label for="updateRecurring" class="font-semibold">Recurring:</label>
+            <input type="checkbox" id="updateRecurring" class="border border-gray-300 px-3 py-2 rounded" />
+          </div>
+      
+          <div class="mb-4" id="update-event-mapping" style="display: none">
+            <label for="updateEventMapping" class="font-semibold">Event Mapping:</label>
+            <select id="updateEventMapping" class="border border-gray-300 px-3 py-2 rounded w-full">
+              <!-- JavaScript code will dynamically populate the options here -->
+            </select>
+          </div>
+      
+          <div class="mb-4">
+            <label for="updatePriority" class="font-semibold">Priority:</label>
+            <input disabled type="number" id="updatePriority" class="border border-gray-300 px-3 py-2 rounded w-full" />
+          </div>
+      
+      
+          <button id="updateButton" class="bg-blue-500 text-white py-2 px-4 rounded">
+            Update
+          </button>
+          <button id="cancelButton" class="bg-gray-500 text-white py-2 px-4 rounded ml-2">
+            Cancel
+          </button>
+        </div>
+      </div>
+      
       <!-- Job List -->
-      <h2 class="text-2xl font-bold mt-8">Job List</h2>
-      <div id="tablesContainer" class="mt-4 bg-white shadow rounded">
-        <!-- Tables will be dynamically added here -->
+      <div class="mx-8 my-4">
+        <h2 class="text-2xl font-bold mt-8">Job List</h2>
+        <div id="tablesContainer" class="mt-4 bg-white shadow rounded">
+          <!-- Tables will be dynamically added here -->
+        </div>
       </div>
     </div>
 
