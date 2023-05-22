@@ -102,7 +102,6 @@ def stop_job_scheduler(job: Job, db):
         db: The database connection.
     """
     try:
-        # Step 3: Log the start of the operation
         logger.info(f"Stopping job scheduler for job ID: {job.id}")
 
         scheduler.remove_job(job.job_scheduler_id)
@@ -113,7 +112,6 @@ def stop_job_scheduler(job: Job, db):
 
         logger.info("Job scheduler stopped successfully")
     except Exception as e:
-        # Step 4: Log the error if an exception occurs
         logger.exception(f"An error occurred while stopping job scheduler: {str(e)}")
 
 
