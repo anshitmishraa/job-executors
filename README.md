@@ -24,7 +24,7 @@ The Job Executor Application is a powerful tool that allows you to manage and ex
 
 ## Database Diagram
 
-![Job Excutor Application](https://github.com/anshitmishraa/Job-Executors/assets/54078251/e2a520de-1a55-4e42-8ea5-361ed85bea15)
+![Job Excutor Application](https://github.com/anshitmishraa/job-executors/assets/54078251/e2a520de-1a55-4e42-8ea5-361ed85bea15)
 
 ## API Documentation
 
@@ -34,7 +34,7 @@ The API documentation for this project can be found [here](https://job-executors
 
 To install and run the Job Executor Application, follow these steps:
 
-- Clone the repository: `https://github.com/anshitmishraa/Job-Executors.git`
+- Clone the repository: `https://github.com/anshitmishraa/job-executors.git`
 - Navigate to the project directory: cd job-executor
 - Set up a virtual environment (optional but recommended) by running the following command:
   - `python -m venv venv`
